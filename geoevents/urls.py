@@ -32,6 +32,7 @@ urlpatterns = patterns(
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
     url(r'^accounts/logout/$', 'geoevents.views.logout', name='logout'),
     url(r'^users/(?P<username>[\w\d\.@+-_\'\s]+)/$', UserPermsUpdate.as_view(), name='user-profile'),
+    url(r'^api/', include(v1_api.urls), name='api-root'),
     url(r'^notes/',include('geoevents.notes.urls')),
     url(r'^services/$', 'geoevents.operations.views.view_services', name='operations-view-services'),
     url(r'^feedback/', include('geoevents.feedback.urls')),
