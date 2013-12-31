@@ -1,0 +1,100 @@
+.highlightBorder {
+    border: 3px dashed green;
+}
+.drag {
+    position: absolute;
+    border: 1px solid #89B;
+    background: #BCE;
+    height: 58px;
+    width: 58px;
+    top: 120px;
+    overflow: hidden;
+    cursor: move;
+}
+.draggable {
+    cursor: move;
+}
+.dropped {
+    background: #BCE;
+}
+
+.report.not_public {
+    background-color: #fee;
+}
+.report {
+    font-size:.8em;
+    background-color: #eef;
+    border-radius: 4px;
+    margin:2px;
+}
+.report .title {
+    font-weight: bold;
+}
+.report .posted_by {
+    font-size: .8em;
+    font-style: italic;
+}
+
+.dataTables_scrollBody .details {
+    background-color: #eef;
+}
+.dataTables_scrollBody {
+    cursor: pointer;
+}
+
+.landing-page-header {
+    margin-bottom: 2px;
+}
+.note {
+    background-color:#eef;
+    border-radius: 8px;
+    padding:4px;
+    margin: 2px;
+}
+.note .title {
+    font-size:14px;
+    font-weight:bold;
+}
+.note .posted_by {
+    font-size:9px;
+    text-align:left;
+    font-weight:bold;
+}
+.note .posted_date {
+    font-size:9px;
+    float:right;
+    font-style: italic
+}
+
+.horizontalLinkHolder {
+    white-space: nowrap;
+    overflow-x: auto;
+}
+.horizontalLinkHolder .link {
+    background-color: #ffe;
+    border-radius: 4px;
+    border: 1px solid gold;
+    line-height: 100%;
+    letter-spacing: -0.2px;
+    margin-right: 1px;
+    padding: 3px 1px 3px 1px;
+    min-width: 26px;
+    max-width: 44px;
+    height: 28px;
+    font-size: 9px;
+    font-family: arial, helvetica, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+}
+.horizontalLinkHolder .link:hover {
+    background-color: #ffa;
+}
+.horizontalLinkHolder .category {
+    background-color: #eed;
+    text-align: center;
+    margin:1px;
+    font-size: 11px;
+    font-family: arial, helvetica, sans-serif;
+    font-weight: bold;
+}

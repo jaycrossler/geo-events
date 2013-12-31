@@ -1,0 +1,122 @@
+[
+{
+    "pk": 1, 
+    "model": "core.setting", 
+    "fields": {
+        "name": "site_title", 
+        "value": "NGA Geo Events"
+    }
+},
+{
+    "pk": 2, 
+    "model": "core.setting", 
+    "fields": {
+        "name": "organization_name", 
+        "value": "NGA"
+    }
+},
+{
+    "pk": 3, 
+    "model": "core.setting", 
+    "fields": {
+        "name": "email_share_text", 
+        "value": "You will need to log in using a Geoint-Online account or a CAC-card.%0D %0D If you require an account, fill out the request form and a NGA government POCs can sponsor you.%0D %0D"
+    }
+},
+{
+    "pk": 4, 
+    "model": "core.setting", 
+    "fields": {
+        "name": "serverurl_owa", 
+        "value": "http://app01.ozone.nga.mil/php/owa"
+    }
+},
+{
+    "pk": 5,
+    "model": "core.setting", 
+    "fields": {
+        "name": "serverurl_google_geocode", 
+        "value": "http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address="
+    }
+},
+{
+    "pk": 6,
+    "model": "core.setting", 
+    "fields": {
+        "name": "header_banner", 
+        "value": "UNCLASSIFIED"
+    }
+},
+{
+    "pk": 7,
+    "model": "core.setting", 
+    "fields": {
+        "name": "site_active_events_title", 
+        "value": "NGA Geo Events Page"
+    }
+},
+{
+    "pk": 8,
+    "model": "core.setting", 
+    "fields": {
+        "name": "serverurl_parent_linkto", 
+        "value": "https://www1.nga.mil/"
+    }
+},
+{
+    "pk": 9,
+    "model": "core.setting", 
+    "fields": {
+        "name": "developer_team_name", 
+        "value": "NGA T"
+    }
+},
+{
+    "pk": 10,
+    "model": "core.setting", 
+    "fields": {
+        "name": "owa_siteid", 
+        "value": "acb7bf6fe523436c8f181bd1f43ca9a7"
+    }
+},
+{
+    "pk": 11,
+    "model": "core.setting", 
+    "fields": {
+        "name": "serverurl_title_linkto", 
+        "value": "/"
+    }
+},
+{
+    "pk": 12,
+    "model": "core.setting", 
+    "fields": {
+        "name": "supporting_links_html", 
+        "value": "<h3 class=\"landing-page-header\"><i class=\"icon icon-download-alt\"></i>Supporting Apps</h3>\r\n<ul>\r\n            <li><a href='https://apps.nga.mil/appdetails?id=6' target='_blank'>Map Atlas</a><br/>\r\n            <li><a href='https://apps.nga.mil/appdetails?id=3' target='_blank'>HSIP Compass (Android)</a><br/>\r\n            <li><a href='https://apps.nga.mil/appdetails?id=2' target='_blank'>HSIP Compass (iPhone)</a><br/>\r\n            <li><a href='https://apps.nga.mil/appdetails?id=10' target='_blank'>UFO (Android)</a><br/>\r\n            <li><a href='https://apps.nga.mil/appdetails?id=54' target='_blank'>UFO (iPhone)</a><br/>\r\n            <li><a href='https://play.google.com/store/apps/details?id=air.com.adobe.connectpro&feature=search_result' target='_blank'>DCO Connect (Android)</a><br/>\r\n            <li><a href='https://itunes.apple.com/us/app/adobe-connect-mobile-for-ios/id430437503?mt=8' target='_blank'>DCO Connect (iPhone)</a><br/>\r\n</ul>"
+    }
+},
+{
+    "pk": 13,
+    "model": "core.setting", 
+    "fields": {
+        "name": "serverurl_favicon", 
+        "value": "https://app02.ozone.nga.mil/favicon.ico"
+    }
+},
+{
+    "pk": 14,
+    "model": "core.setting", 
+    "fields": {
+        "name": "header_banner_text_color", 
+        "value": "white"
+    }
+},
+{
+    "pk": 15,
+    "model": "core.setting", 
+    "fields": {
+        "name": "header_banner_background_color", 
+        "value": "green"
+    }
+}
+]

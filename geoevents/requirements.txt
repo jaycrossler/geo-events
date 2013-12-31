@@ -1,0 +1,13 @@
+Paver==1.2.1
+Django==1.5.1
+Markdown==2.2.1
+South==0.8.0
+django_tastypie==0.9.12
+psycopg2==2.4.5
+wsgiref==0.1.2
+django-compressor==1.2
+requests==1.1.0
+pytz==2012j
+geopy==0.95.1
+PIL==1.1.7
+django-filer==0.9.5
