@@ -243,11 +243,11 @@ AUTHENTICATION_BACKENDS = (
 # the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
-log_file = os.path.join(SITE_ROOT, 'log', 'geoevents.log')
-import os
-
-if not os.path.exists(log_file):
-    open('file', 'w').close()
+# log_file = os.path.join(SITE_ROOT, 'log', 'geoevents.log')
+# import os
+#
+# if not os.path.exists(log_file):
+#     open('file', 'w').close()
 
 LOGGING = {
     'version': 1,
@@ -266,14 +266,14 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'geoevents_rotating': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'formatter': 'verbose',
-            'filename': log_file,
-            'backupCount': 5,
-            'maxBytes': 5242880,
-        },
+        # 'geoevents_rotating': {
+        #     'level': 'INFO',
+        #     'class': 'logging.handlers.RotatingFileHandler',
+        #     'formatter': 'verbose',
+        #     'filename': log_file,
+        #     'backupCount': 5,
+        #     'maxBytes': 5242880,
+        # },
     },
     'loggers': {
         'django.request': {
@@ -281,10 +281,10 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'geoevents': {
-            'handlers': ['geoevents_rotating'],
-            'level': 'INFO',
-        }
+        # 'geoevents': {
+        #     'handlers': ['geoevents_rotating'],
+        #     'level': 'INFO',
+        # }
     }
 }
 
