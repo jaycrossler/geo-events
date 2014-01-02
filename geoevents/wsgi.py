@@ -1,5 +1,5 @@
 """
-WSGI config for procyon project.
+WSGI config for geoevents project.
 
 This module contains the WSGI application used by Django's development server
 and any production WSGI deployments. It should expose a module-level variable
@@ -15,7 +15,7 @@ framework.
 """
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "procyon.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "geoevents.settings")
 
 import geoevents.startup as startup
 
