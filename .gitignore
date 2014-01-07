@@ -7,3 +7,5 @@ CACHE/*
 geoevents/local_settings.py
 geoevents_dev
 geoevents_dev/*
+*.DS_Store
+*.swp
