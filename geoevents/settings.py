@@ -277,7 +277,7 @@ LOGGING = {
     },
     'loggers': {
         'django.request': {
-            'handlers': ['mail_admins', 'geoevents_rotating'],
+            'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
         },
