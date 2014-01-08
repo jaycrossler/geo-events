@@ -16,8 +16,8 @@ COMPRESS_ENABLED = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'geoevents_app', 
-        'USER': 'geoevents_app',
+        'NAME': 'geoevents',
+        'USER': 'geoevents',
         'PASSWORD': 'geoevents', 
         'HOST': '', # Set to empty string for localhost.
         'PORT': '', # Set to empty string for default. 
