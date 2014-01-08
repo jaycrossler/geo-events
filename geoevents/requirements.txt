@@ -9,5 +9,4 @@ django-compressor==1.2
 requests==1.1.0
 pytz==2012j
 geopy==0.95.1
-PIL==1.1.7
 django-filer==0.9.5
