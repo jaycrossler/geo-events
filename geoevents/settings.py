@@ -11,17 +11,14 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 # These variables require modification when migrating to production. #
 ######################################################################
 SITE_ID = 1
-STATIC_URL_FOLDER = '' # Can be set to something like 'geoevents-test/' if the app is not run at root level
+STATIC_URL_FOLDER = ''  # Can be set to something like 'geoevents-test/' if the app is not run at root level
 COMPRESS_ENABLED = True
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'geoevents',
-        'USER': 'geoevents',
-        'PASSWORD': 'geoevents', 
-        'HOST': '', # Set to empty string for localhost.
-        'PORT': '', # Set to empty string for default. 
-    }
+    'default': dict(ENGINE='django.contrib.gis.db.backends.postgis',
+                    NAME='geoevents',
+                    USER='geoevents',
+                    PASSWORD='geoevents',
+                    HOST='', PORT='')
 }
 
 
@@ -306,13 +303,11 @@ def base_url():
     """
     from django.contrib.sites.models import Site
 
-    DOMAIN = Site.objects.get_current().domain
-    PROTOCOL = 'http://' if 'localhost' in DOMAIN else 'https://'
-    return '{0}{1}'.format(PROTOCOL, DOMAIN)
+    domain = Site.objects.get_current().domain
+    protocol = 'http://' if 'localhost' in domain else 'https://'
+    return '{0}{1}'.format(protocol, domain)
 
 
 BASE_URL = lazy(base_url, str)
 LOGIN_URL = r'/accounts/login/'
 LOGOUT_URL = r'/accounts/logout/'
-
-
