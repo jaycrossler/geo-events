@@ -11,7 +11,7 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 # These variables require modification when migrating to production. #
 ######################################################################
 SITE_ID = 1
-STATIC_URL_FOLDER = 'geoevents-test/'
+STATIC_URL_FOLDER = '' # Can be set to something like 'geoevents-test/' if the app is not run at root level
 COMPRESS_ENABLED = True
 DATABASES = {
     'default': {
@@ -53,7 +53,7 @@ FEEDBACK_URL = 'http://www.yourserver.com/contact'
 FEEDBACK_EMAIL_TO = ['contact-admins@yourserver.com']
 EMAIL_NEW_EVENT_TO = ['contact-admins@yourserver.com']
 PRODUCT_FEED_FORMAT = 'http://www.yourserver.com/product_list?name={0}&tags={1}'
-BRANDING_LOGO_URL = '/static/geoevents-test/images/storm.png'
+BRANDING_LOGO_URL = '/static/images/storm.png'
 SITE_TITLE = "Geo Events Pages"
 
 FIXTURE_DIRS = (
@@ -99,7 +99,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '{0}{1}'.format('/ozone/httpd/static/', STATIC_URL_FOLDER)
+STATIC_ROOT = '{0}{1}'.format('/usr/src/static/', STATIC_URL_FOLDER)
 
 # URL prefix for static files.
 STATIC_URL = '{0}{1}'.format('/static/', STATIC_URL_FOLDER)

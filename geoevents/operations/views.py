@@ -67,7 +67,10 @@ class EventsDashboard(ListView):
     try:
         map = Map.objects.get(title='Dashboard')
     except:
-        map = Map.objects.get(title='Base Map')
+        try:
+            map = Map.objects.get(title='Base Map')
+        except:
+            map = None
 
     def get_context_data(self, **kwargs):
         cv = super(EventsDashboard, self).get_context_data(**kwargs)
@@ -177,7 +180,10 @@ class KMLReponse(DetailView):
 
 
 class DeploymentView(DetailView):
-    map = Map.objects.get(title='Base Map')
+    try:
+        map = Map.objects.get(title='Base Map')
+    except:
+        map = None
 
     def get_context_data(self, **kwargs):
         cv = super(DeploymentView, self).get_context_data(**kwargs)
