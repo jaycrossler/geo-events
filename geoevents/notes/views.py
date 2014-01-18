@@ -1,8 +1,9 @@
 from django.views.generic.edit import CreateView
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse_lazy
-from geoevents.notes.forms import NoteForm, NoteFormMinimal
-from geoevents.notes.models import Note
+from .forms import NoteForm, NoteFormMinimal
+from .models import Note
 
 
 class NoteCreateView(CreateView):
@@ -12,15 +13,18 @@ class NoteCreateView(CreateView):
     form_class = NoteForm
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user
-
+        if self.request.user.is_authenticated():
+            form.instance.owner = self.request.user
+        else:
+            form.instance.owner = User.objects.all()[0]
         if self.kwargs.get('pk'):
             form.instance.object_id = self.kwargs['pk']
 
         if self.kwargs.get('model'):
             form.instance.content_type = ContentType.objects.get(model=self.kwargs['model'])
 
-        return super(NoteCreateView, self).form_valid(form)
+        self.valid = super(NoteCreateView, self).form_valid(form)
+        return self.valid
 
     def get(self, request, *args, **kwargs):
         self.object = None
@@ -39,3 +43,6 @@ class NoteCreateView(CreateView):
             success_url = reverse_lazy('home')
         success_url = "/" + str(success_url)
         return success_url
+
+
+

@@ -68,31 +68,30 @@ director_support.drawWidget=function(widget,$main,numberDrawn){
                         .appendTo($note);
                 }
                 if (note.edit_url && dashboard.permissions.edit_notes){
-                    $('<span class="header-actions pull-right"><a href="'+note.edit_url+'"><i class="icon icon-comment"></i></a></span>')
-                        .tooltip({title:'Edit this note',trigger:'hover',placement:'top'})
+                    $('<span class="header-actions pull-right"><a href="'+note.delete_url+'"> [Del] </i></a></span> ')
+                        .appendTo($note);
+
+                    $('<span class="header-actions pull-right"><a href="#"> [Edit] </i></a></span> ')
+                        .on('click',function(){director_support.plugins.note_editForm(note, widget.id)})
                         .appendTo($note);
                 }
 
-                if (note.content){
-                    $('<div>')
-                        .addClass('content')
-                        .html(note.content)
-                        .appendTo($note);
-                }
+                $('<span>')
+                    .addClass('content')
+                    .html(note.content || "&lt;no details entered&gt;")
+                    .appendTo($note);
                 if (note.posted_by){
-                    $('<span>')
+                    var $postedby = $('<span>')
                         .addClass('posted_by')
                         .text('Posted by '+note.posted_by)
                         .appendTo($note);
-                }
-                if (note.posted_date){
-                    var date = Helpers.dateFromPythonDate(note.posted_date,'');
-                    if (date) {
-                        $('<span>')
-                            .addClass('posted_date')
-                            .text(date.calendar())
-                            .tooltip({title:date.toLocaleString(),trigger:'hover',placement:'top'})
-                            .appendTo($note);
+                    if (note.posted_date){
+                        var date = Helpers.dateFromPythonDate(note.posted_date,'');
+                        if (date) {
+                            var dtg ='Posted: '+date.toLocaleString();
+                            $postedby
+                                .tooltip({title:dtg,trigger:'hover',placement:'top'});
+                        }
                     }
                 }
 
@@ -100,27 +99,30 @@ director_support.drawWidget=function(widget,$main,numberDrawn){
                 console.log("Error handling a note within Wiki widget: "+widget.name);
             }
 
-            var desc="<b>Notes from: "+widget.name+"</b><br/>";
-            desc+=note.content;
-
-            dashboard.data.timeline_events.push({
-                start: moment(note.posted_date),
-                createdAt: moment(note.posted_date),
-                date: note.posted_date,
-                title: note.title,
-                details: desc,
-                link: note.url,
-                type: 'Note',
-                className: 'timeline-item-rfi', //TODO: Create new classes
-                status: widget.name,
-                group: 'Note'
-            });
+//            var desc="<b>Notes from: "+widget.name+"</b><br/>";
+//            desc+=note.content;
+//
+//            dashboard.data.timeline_events.push({
+//                start: moment(note.posted_date),
+//                createdAt: moment(note.posted_date),
+//                date: note.posted_date,
+//                title: note.title,
+//                details: desc,
+//                link: note.url,
+//                type: 'Note',
+//                className: 'timeline-item-rfi', //TODO: Create new classes
+//                status: widget.name,
+//                group: 'Note'
+//            });
         })
     }
     if (widget.type=="iFrame" && widget.iframe_url){
         title_link = widget.iframe_url;
     }
-    var widget_span = 'span'+(widget.width||6);
+    var widget_span = '';
+    if (widget.width < 12) {
+       widget_span ='span'+(widget.width||6);
+    }
 
     var $widget = $('<div>')
         .addClass(widget_span)
@@ -156,24 +158,24 @@ director_support.drawWidget=function(widget,$main,numberDrawn){
         $('<span class="header-actions pull-right">')
             .attr('id',headerdiv_name)
             .appendTo($title);
-        if (widget.description){
+        if (widget.description || title_subtext){
             $title_text
                 .css('cursor','pointer')
-                .popover({title:widget.name,content:widget.description, trigger:'hover',placement:'top'})
+                .popover({title:title_subtext || widget.name,content:widget.description || "", trigger:'hover',placement:'top'})
         }
     } else {
         //TODO: make empty divs with same names so other parent/holder calls don't fail
     }
 
-    if (title_subtext && use_title_bar) {
-        var $subtext = $('<div>')
-            .addClass('header-subtext')
-            .appendTo($inner);
-        $('<div>')
-            .addClass('row-fluid content')
-            .text(title_subtext)
-            .appendTo($subtext);
-    }
+//    if (title_subtext && use_title_bar) {
+//        var $subtext = $('<div>')
+//            .addClass('header-subtext')
+//            .appendTo($inner);
+//        $('<div>')
+//            .addClass('row-fluid content')
+//            .text(title_subtext)
+//            .appendTo($subtext);
+//    }
     var $content;
     if (widget.type=="iFrame"){
         $content = $('<iframe>')
@@ -195,11 +197,30 @@ director_support.drawWidget=function(widget,$main,numberDrawn){
         $content.addClass('thumbnail');
     }
 
-    if (widget.type=='Wiki' && widget.add_note_url && dashboard.permissions.add_notes){
-        //TODO: Have add note be in modal window
+    //TODO: This only works with one note per page!
+    director_support.plugins.note_modalForm = director_support.plugins.note_addForm();
+    director_support.plugins.note_modalForm.appendTo($content);
+
+    if (widget.type=='Wiki' ){
+//    if (widget.type=='Wiki' && widget.add_note_url && dashboard.permissions.add_notes){
+
         var $parentdiv = $('#'+headerdiv_name);
-        $('<a class="btn btn-mini" role="button" href="'+widget.add_note_url+'">Add Note</a>')
+        $("<a>")
+            .addClass("btn btn-mini")
+            .attr({href:"#"})
+            .text("Quick Add Note")
+            .on('click',function(){director_support.plugins.note_editForm(false,widget.id)})
             .appendTo($parentdiv);
+
+        var root_minus_slash = event_pages.options.root;
+        if (root_minus_slash == "/") root_minus_slash = "";
+        var longUrl = widget.add_note_url + root_minus_slash + 'director/board/' + dashboard.id + '/';
+        $("<a>")
+            .addClass("btn btn-mini")
+            .attr({href:longUrl})
+            .text("Add Formatted Note")
+            .appendTo($parentdiv);
+
     }
 
     $content.attr('id',maindiv_name);
@@ -208,7 +229,7 @@ director_support.drawWidget=function(widget,$main,numberDrawn){
     }
     if (widget.height){
         var height=director_support.widgetContentHeight(widget);
-        $content.css('height',height+'px')
+        $content.css('max-height',height+'px')
     }
 
     return $content;
@@ -349,6 +370,22 @@ director_support.addWidgetToolbar = function(options){
 
     var headerDivName = options.divName || director_support.widgetDivName(options.widget,options.numberDrawn,'header');
     var $headerdiv = $('#'+headerDivName);
+    if (!options.useDropDownMenu) {
+        _.each(options.links,function(link){
+            var url = "#";
+            if (link.url){
+                url = link.url;
+            }
+            $("<a>")
+                .addClass("btn btn-mini")
+                .attr({href:url})
+                .text(link.text || "Run")
+                .click(link.click || function(){document.location.href=link.url})
+                .appendTo($headerdiv);
+        });
+        return;
+    }
+    //Otherwise build within a dropdown menu
     var $dd = $("<div>")
         .addClass("dropdown btn-group")
         .appendTo($headerdiv);
@@ -364,7 +401,6 @@ director_support.addWidgetToolbar = function(options){
     var $ul = $("<ul>")
         .addClass("dropdown-menu")
         .appendTo($dd);
-
     _.each(options.links,function(link){
         var $li = $("<li>")
             .appendTo($ul);
@@ -403,3 +439,116 @@ director_support.addWidgetToolbar = function(options){
 
 };
 
+
+director_support.plugins.note_editForm=function(item, widget_id){
+    widget_id = widget_id || 0;
+
+    var form = director_support.plugins.note_modalForm;
+    var form_title = form.find('h3');
+    var title = form.find('[name="title"]');
+    var content = form.find('[name="content"]');
+    var id = form.find('[name="id"]');
+    var widgetid = form.find('[name="widget_id"]');
+
+    if (item && item.id) {
+        form_title.text("Edit note");
+        title.val(item.title);
+        content.val(item.content);
+        id.val(item.id);
+        widgetid.val(widget_id);
+    } else {
+        form_title.text("Add a note");
+        title.val("");
+        content.val("");
+        id.val("");
+        widgetid.val(widget_id);
+    }
+    form.modal('show');
+};
+
+director_support.plugins.note_addForm=function(){
+    var $form = $("<div>")
+        .addClass("modal hide fade")
+        .attr({tabindex:-1,role:'dialog',ariaLabelledby:"popup_header", ariaHidden:"true"});
+
+    var $header=$("<div>")
+        .addClass("modal-header")
+        .appendTo($form);
+    $("<button>")
+        .addClass("close")
+        .attr({type:"button",dataDismiss:"modal",ariaHidden:"true"})
+        .html("&times;")
+        .click(function(){
+            $form.modal('hide');
+        })
+        .appendTo($header);
+    $("<h3>")
+        .html("Add a note")
+        .appendTo($header);
+
+    var $body=$("<form>")
+        .addClass("modal-body")
+        .appendTo($form);
+
+    //----------------
+    $("<input>")
+        .attr({type:'text',name:'title',placeholder:'Short title of note'})
+        .appendTo($body);
+    $("<textarea>")
+        .attr({name:'content',placeholder:'Detailed note content'})
+        .appendTo($body);
+    $("<input>")
+        .css({display:'none'})
+        .attr({type:'checkbox',name:'public',checked:true})
+        .appendTo($body);
+    $("<input>")
+        .css({display:'none'})
+        .attr({name:'id',value:''})
+        .appendTo($body);
+    $("<input>")
+        .css({display:'none'})
+        .attr({name:'widget_id',value:'1'})
+        .appendTo($body);
+
+    //----------------
+
+    var $footer=$("<div>")
+        .addClass("modal-footer")
+        .appendTo($form);
+    $("<button>")
+        .addClass("btn")
+        .attr({dataDismiss:"modal",ariaHidden:"true"})
+        .html("Close")
+        .click(function(){
+            $form.modal('hide');
+        })
+        .appendTo($footer);
+    $("<button>")
+        .addClass("btn")
+        .attr({dataDismiss:"modal",ariaHidden:"true"})
+        .html("Submit")
+        .click(function(e){
+            e.preventDefault();
+            var url = event_pages.options.root+'director/note/new/';
+
+            $.post(url,
+                $body.serialize(),function(data,status,xhr){
+                    console.log(data);
+                    if (data.status=='created' || data.status=='edited'){
+                        $form.modal('hide');
+                        $body[0].reset();
+
+                        //TODO: Refresh just the widget to reload data
+                        document.location.reload();
+                    }
+                }
+            );
+        })
+        .appendTo($footer);
+
+
+    return $form;
+};
+director_support.plugins.note_delete = function(item){
+
+};

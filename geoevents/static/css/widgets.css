@@ -11,6 +11,13 @@
     overflow: hidden;
     cursor: move;
 }
+
+.modal .modal-body > textarea {
+    height: 200px;
+    width: 95%;
+}
+
+
 .draggable {
     cursor: move;
 }
@@ -44,19 +51,33 @@
 
 .landing-page-header {
     margin-bottom: 2px;
+    background-color: orange;
+    border-radius: 4px;
+    padding-left: 6px;
+    padding-bottom: 4px;
 }
 .note {
-    background-color:#eef;
     border-radius: 8px;
     padding:4px;
     margin: 2px;
 }
+.note:nth-child(odd) {
+    background-color:#E3D5FC;
+}
+.note:nth-child(even) {
+    background-color:#E6C8E0;
+}
+
 .note .title {
     font-size:14px;
     font-weight:bold;
 }
+.note .content {
+    display: block;
+}
 .note .posted_by {
     font-size:9px;
+    float:right;
     text-align:left;
     font-weight:bold;
 }
@@ -97,4 +118,30 @@
     font-size: 11px;
     font-family: arial, helvetica, sans-serif;
     font-weight: bold;
+}
+
+::-webkit-scrollbar
+{
+  width: 12px;  /* for vertical scrollbars */
+  height: 12px; /* for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track
+{
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb
+{
+  background: rgba(0, 0, 0, 0.5);
+}
+
+body{
+    scrollbar-face-color: #000000;
+    scrollbar-shadow-color: #2D2C4D;
+    scrollbar-highlight-color:#7D7E94;
+    scrollbar-3dlight-color: #7D7E94;
+    scrollbar-darkshadow-color: #2D2C4D;
+    scrollbar-track-color: #7D7E94;
+    scrollbar-arrow-color: #C1C1D1;
 }

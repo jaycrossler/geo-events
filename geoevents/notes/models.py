@@ -34,9 +34,11 @@ class Note(models.Model):
 
     def note_info(self):
         return {
+            "id": self.id,
             "title": self.title,
             "url": str(self.get_absolute_url()),
             "edit_url": str(self.get_edit_url()),
+            "delete_url": str(self.get_delete_url()),
             "content": self.content,
             "posted_date": str(self.last_updated),
             "posted_by": str(self.owner),
@@ -47,3 +49,6 @@ class Note(models.Model):
 
     def get_edit_url(self):
         return reverse('notes-manage-note-id', args=[self.id])
+
+    def get_delete_url(self):
+        return reverse('notes-delete-note-id', args=[self.id])

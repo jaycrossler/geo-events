@@ -9,6 +9,7 @@ from geoevents.operations.api import EventResource, EventTypesResource, LessonLe
 from geoevents.timeline.api import TimelineItemResource
 from geoevents.views import UserPermsUpdate
 from tastypie.api import Api
+
 admin.autodiscover()
 
 v1_api = Api(api_name='v1')
@@ -33,9 +34,10 @@ urlpatterns = patterns(
     url(r'^accounts/logout/$', 'geoevents.views.logout', name='logout'),
     url(r'^users/(?P<username>[\w\d\.@+-_\'\s]+)/$', UserPermsUpdate.as_view(), name='user-profile'),
     url(r'^api/', include(v1_api.urls), name='api-root'),
-    url(r'^notes/',include('geoevents.notes.urls')),
+    url(r'^notes/', include('geoevents.notes.urls')),
     url(r'^services/$', 'geoevents.operations.views.view_services', name='operations-view-services'),
     url(r'^feedback/', include('geoevents.feedback.urls')),
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^timeline/', include('geoevents.timeline.urls')),
+    url(r'^director/', include('geoevents.director.urls')),
 )

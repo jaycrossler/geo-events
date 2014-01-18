@@ -21,33 +21,36 @@ director_support.plugins.actions.buildTable=function(widget,numberDrawn,$content
 
     var height = director_support.widgetContentHeight(widget)-49+'px';
 
+    var actions_data = dashboard.data.actions;
+    if (widget.data && widget.data.category) {
+        //There is a category specified, so only show those that match the title of this widget
+        actions_data = _.filter(actions_data, function(item){return item.category == widget.data.category});
+    }
 
+    actions_data = actions_data || [];
     $actionTable.dataTable( {
         "bJQueryUI": true,
-        "aaData": dashboard.data.actions,
+        "aaData": actions_data,
         "sProcessing":true,
-        "bScrollCollapse": (Helpers.isIOS ? false : true),
         "bScrollInfinite": (Helpers.isIOS ? false : true),
         "sScrollY": (Helpers.isIOS ? null : height),
-        "bStateSave": true,
         "sDom": 't<"F">',
         "fnRowCallback":function( tr, rowData, rowNum, rowNumFull ) {
             //After cells are rendered with basic data, spice them up with jQuery
             var cell_style={fontWeight:'bold',textAlign:'center',whiteSpace:'nowrap'};
 
-            var $cell1 = $('td:eq(0)', tr);
-            var $cell2 = $('td:eq(1)', tr);
-            var $cell3 = $('td:eq(2)', tr);
-            var $cell4 = $('td:eq(3)', tr);
-            var $cell5 = $('td:eq(4)', tr);
+            var $cell1 = $('td:eq(0)', tr);  //Hot
+            director_support.plugins.actions.setCellHotness(rowData.hotness,$cell1,cell_style);
 
-            $cell1
+            var $cell2 = $('td:eq(1)', tr)  //ID
                 .css(cell_style)
                 .text(rowData.action_id);
-
-            director_support.plugins.actions.setCellToDate(rowData.date_plan_due,$cell3,cell_style);
-            director_support.plugins.actions.setCellToDate(rowData.date_final_due,$cell4,cell_style);
-            director_support.plugins.actions.setCellToDate(rowData.date_closed,$cell5,cell_style,'Open');
+            var $cell3 = $('td:eq(2)', tr);  //Summary
+            var $cell4 = $('td:eq(3)', tr);  //OPR
+            var $cell5 = $('td:eq(4)', tr);  //Due
+            director_support.plugins.actions.setCellToDate(rowData.date_final_due,$cell5,cell_style);
+            var $cell6 = $('td:eq(5)', tr);  //Status
+            director_support.plugins.actions.setCellToDate(rowData.date_closed,$cell6,cell_style,'Open');
 
 
             $(tr).on('click',function(){
@@ -82,24 +85,27 @@ director_support.plugins.actions.buildTable=function(widget,numberDrawn,$content
         },
 
         "aoColumns": [
-            {
+            {   sTitle: "Hot",
+                mDataProp: "hotness"
+            }
+            ,{
                 sTitle: "ID",
                 mDataProp: "action_id"
             }
             ,{
-                sTitle: "Assigned",
+                sTitle: "Summary",
+                mDataProp: "description"
+            }
+            ,{
+                sTitle: "OPR/Assigned to",
                 mDataProp: "assigned_to"
             }
             ,{
-                sTitle: "Plan Due",
-                mDataProp: "date_plan_due"
-            }
-            ,{
-                sTitle: "Final Due",
+                sTitle: "Due",
                 mDataProp: "date_final_due"
             }
             ,{
-                sTitle: "Closed",
+                sTitle: "Status",
                 mDataProp: "date_closed"
             }
 
@@ -108,50 +114,31 @@ director_support.plugins.actions.buildTable=function(widget,numberDrawn,$content
 
 
     var $headerdiv = $('#'+director_support.widgetDivName(widget,numberDrawn,'header'));
-    var $addForm = director_support.plugins.actions.addForm();
+    var $addForm = director_support.plugins.actions.addForm(widget);
     $addForm.appendTo($content);
 
 
-    if  (dashboard.permissions.add_action)
-	{
-    var longUrl=event_pages.options.root+'director/action/add/';
-    var $dd = $("<div>")
-        .addClass("dropdown btn-group")
-        .appendTo($headerdiv);
+    if  (dashboard.permissions.add_action){
+        var longUrl=event_pages.options.root+'director/action/add/';
+        $("<a>")
+            .addClass("btn btn-mini")
+            .attr({href:"#"})
+            .text("Quick Add")
+            .click(function(){
+                $addForm.modal('show');
+            })
+            .appendTo($headerdiv);
 
-    var $dd_a = $("<button>")
-        .addClass("btn dropdown-toggle btn-mini")
-        .attr({dataToggle:"dropdown"})
-        .text("Add Action Item")
-        .appendTo($dd);
-    $("<span>")
-        .addClass("caret")
-        .appendTo($dd_a);
-    var $ul = $("<ul>")
-        .addClass("dropdown-menu")
-        .appendTo($dd);
-    var $l1 = $("<li>")
-        .appendTo($ul);
-    $("<a>")
-        .attr({href:"#"})
-        .text("Quick Add")
-        .click(function(){
-            $addForm.modal('show');
-        })
-        .appendTo($l1);
-
-    var $l2 = $("<li>")
-        .appendTo($ul);
-    $("<a>")
-        .attr({href:longUrl})
-        .text("Detailed Add")
-        .click(function(){
-            document.location.href=longUrl;
-        })
-        .appendTo($l2);
+        $("<a>")
+            .addClass("btn btn-mini")
+            .attr({href:longUrl})
+            .text("Detailed Add")
+            .click(function(){
+                document.location.href=longUrl;
+            })
+            .appendTo($headerdiv);
 	}
 };
-
 
 
 director_support.plugins.actions.functionFormatDetails=function(table,tr) {
@@ -161,11 +148,29 @@ director_support.plugins.actions.functionFormatDetails=function(table,tr) {
         .css({padding:'10px',width:'100%'});
 
     var desc = "";
+    if (rowData.originator){
+        desc+="<b>Tasker: </b>"+rowData.originator+"<br/>";
+    }
+    var dates = [];
+    if (rowData.date_assigned && rowData.date_assigned!="None"){
+        dates.push("<b>Assigned: </b>"+rowData.date_assigned);
+    }
+    if (rowData.date_updated && rowData.date_updated!="None"){
+        dates.push("<b>Updated: </b>"+rowData.date_updated);
+    }
+    if (rowData.date_plan_due && rowData.date_plan_due!="None"){
+        dates.push("<b>Plan Due: </b>"+rowData.date_plan_due);
+    }
+    if (rowData.date_final_due && rowData.date_final_due!="None"){
+        dates.push("<b>Due: </b>"+rowData.date_final_due);
+    }
+    if (rowData.date_closed && rowData.date_closed!="None"){
+        dates.push("<b>Closed: </b>"+rowData.date_closed);
+    }
+    desc += dates.join(", ")+"<br/>";
+
     if (rowData.action_notes){
         desc+="<b>Notes: </b>"+rowData.action_notes+"<br/>";
-    }
-    if (rowData.description){
-        desc+="<b>Description: </b>"+rowData.description+"<br/>";
     }
     if (rowData.current_status){
         desc+="<b>Current Status: </b>"+rowData.current_status+"<br/>";
@@ -173,38 +178,6 @@ director_support.plugins.actions.functionFormatDetails=function(table,tr) {
 
     var $tr = $('<div>')
         .html(desc);
-
-//    var output = obs.observation_date;
-//    var dtg_moment =  moment(output);
-//    if (output && dtg_moment.isValid()){
-//        output = dtg_moment.fromNow();
-//    }
-//
-//    var url = event_pages.options.root + "admin/director/programobservation/" + obs.id;
-//    var $editLink = $('<a>')
-//        .attr({href:url,target:'_new'})
-//        .appendTo($tr);
-//    $('<i>')
-//        .addClass('icon icon-pencil')
-//        .tooltip({title:'Edit this observation',trigger:'hover',placement:'left'})
-//        .appendTo($editLink);
-//
-//    var url_quad = event_pages.options.root + "director/quadchart/" + obs.id;
-//    var $shownLink = $('<a>')
-//        .attr({href:url_quad,target:'_blank'})
-//        .css({margin:'6px'})
-//        .appendTo($tr);
-//    $('<i>')
-//        .addClass('icon icon-th-large')
-//        .tooltip({title:'Show Quad Chart',trigger:'hover',placement:'right'})
-//        .appendTo($shownLink);
-//
-//    $('<span>')
-//        .text('Observation from '+output+": ")
-//        .appendTo($tr);
-//
-//    var $obs = director_support.plugins.actions.recordObs(obs);
-//    $obs.appendTo($tr);
 
     $tr.appendTo($details);
 
@@ -251,9 +224,15 @@ director_support.plugins.actions.addTimelineItem=function(action){
 };
 
 director_support.plugins.actions.setCellToDate=function(date,$cell,cell_style,empty_text){
+//Thai Colors:    var days_colors = ['red','yellow','pink','green','orange','blue','purple'];
+    var days_colors = ['maroon','white','orange','green','gold','lightblue','darkblue'];
 
     var date_data = Helpers.dateFromPythonDate(date,'');
     if (date_data) {
+        var day_of_week = moment.day();
+        var day_color = days_colors[day_of_week];
+        cell_style.backgroundColor = day_color;
+
         $cell
             .css(cell_style)
             .tooltip({title:date_data.calendar(),action:'hover'})
@@ -266,7 +245,26 @@ director_support.plugins.actions.setCellToDate=function(date,$cell,cell_style,em
     }
 };
 
-director_support.plugins.actions.addForm=function(){
+director_support.plugins.actions.setCellHotness=function(hotness,$cell,cell_style){
+
+    var hotness_icons = ['','hot1.png','hot2.png','hot3.png','hot4.gif','hot5.gif','hot6.gif'];
+    var hotness_dir = event_pages.options.staticRoot + "images/hotness/";
+
+    hotness = parseInt(hotness);
+    var hotness_image_string = '';
+    var hotness_icon = hotness_dir + hotness_icons[hotness];
+    if (hotness > 3) {
+        cell_style.backgroundColor = 'red';
+    }
+    if (hotness > 1) {
+       hotness_image_string = "<img src='"+hotness_icon+"'/> ("+hotness+")";
+    }
+    $cell
+        .css(cell_style)
+        .html(hotness_image_string);
+};
+
+director_support.plugins.actions.addForm=function(widget){
     var $form = $("<div>")
         .addClass("modal hide fade")
         .attr({tabindex:-1,role:'dialog',ariaLabelledby:"popup_header", ariaHidden:"true"});
@@ -283,25 +281,48 @@ director_support.plugins.actions.addForm=function(){
         })
         .appendTo($header);
     $("<h3>")
-        .html("Add an action")
+        .html("Add an action/tasker")
         .appendTo($header);
 
     var $body=$("<form>")
         .addClass("modal-body")
         .appendTo($form);
     //----------------
+//    $("<input>")
+//        .attr({type:'text',name:'hotness',placeholder:'1', length:2})
+//        .appendTo($body);
+
+    var $hotness = $("<input>")
+        .attr({type:'text',name:'hotness',placeholder:'Hotness (from 0 to 5'})
+        .css({display:'none'})
+        .appendTo($body);
+    var hotness_items = [{title:0},
+        {title:1,imgSrc:'/static/images/hotness/hot1.png'},
+        {title:2,imgSrc:'/static/images/hotness/hot2.png'},
+        {title:3,imgSrc:'/static/images/hotness/hot3.png'},
+        {title:4,imgSrc:'/static/images/hotness/hot4.gif'},
+        {title:5,imgSrc:'/static/images/hotness/hot5.gif'}];
+    Helpers.buildBootstrapInputDropdown('Hotness',hotness_items,$hotness)
+        .appendTo($body);
+
     $("<input>")
         .attr({type:'text',name:'action_id',placeholder:'ID of action'})
         .appendTo($body);
     $("<input>")
-        .attr({type:'text',maxLength:120,name:'description',placeholder:'Short description'})
+        .attr({type:'text',maxLength:120,name:'description',placeholder:'Summary'})
         .appendTo($body);
     $("<input>")
-        .attr({type:'text',name:'assigned_to',placeholder:'Assigned To'})
+        .attr({type:'text',name:'assigned_to',placeholder:'OPR(s) assigned to'})
         .appendTo($body);
     $("<textarea>")
-        .attr({name:'action_notes',placeholder:'Detailed task description'})
+        .attr({name:'action_notes',placeholder:'Detailed tasker description'})
         .appendTo($body);
+    if (widget.data && widget.data.category){
+        $("<input>")
+            .attr({type:'text',name:'category',value:widget.data.category})
+            .css({display:'none'})
+            .appendTo($body);
+    }
     $("<input>")
         .attr({type:'text',name:'owning_organization',value:dashboard.org})
         .css({display:'none'})

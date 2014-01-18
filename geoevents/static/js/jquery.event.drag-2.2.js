@@ -178,8 +178,7 @@ drag = $special.drag = {
 			case !dd.dragging && 'touchmove': 
 				event.preventDefault();
 			case !dd.dragging && 'mousemove':
-				//  drag tolerance, x² + y² = distance²
-				if ( Math.pow(  event.pageX-dd.pageX, 2 ) + Math.pow(  event.pageY-dd.pageY, 2 ) < Math.pow( dd.distance, 2 ) ) 
+				if ( Math.pow(  event.pageX-dd.pageX, 2 ) + Math.pow(  event.pageY-dd.pageY, 2 ) < Math.pow( dd.distance, 2 ) )
 					break; // distance tolerance not reached
 				event.target = dd.target; // force target from "mousedown" event (fix distance issue)
 				drag.hijack( event, "dragstart", dd ); // trigger "dragstart"

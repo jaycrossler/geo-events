@@ -12,7 +12,7 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 ######################################################################
 SITE_ID = 1
 STATIC_URL_FOLDER = ''  # Can be set to something like 'geoevents-test/' if the app is not run at root level
-COMPRESS_ENABLED = True
+COMPRESS_ENABLED = False
 DATABASES = {
     'default': dict(ENGINE='django.contrib.gis.db.backends.postgis',
                     NAME='geoevents',
@@ -220,6 +220,7 @@ INSTALLED_APPS = (
     'geoevents.taggit',
     'geoevents.core',
     'geoevents.heartbeat',
+    'geoevents.director',
     'tinymce',
     'geoevents.timeline',
     'south',

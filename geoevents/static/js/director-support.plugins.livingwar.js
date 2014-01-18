@@ -12,6 +12,29 @@ director_support.plugins.livingWAR_merge_reports=function(){
         }
     });
 };
+director_support.plugins.livingWAR_editForm=function(item){
+    var form = director_support.plugins.livingWAR_modalForm;
+    var form_title = form.find('h3');
+    var title = form.find('[name="title"]');
+    var details = form.find('[name="details"]');
+    var tags = form.find('[name="tags"]');
+    var id = form.find('[name="id"]');
+
+    if (item && item.id) {
+        form_title.text("Edit Report");
+        title.val(item.title);
+        details.val(item.details);
+        tags.val(item.tags);
+        id.val(item.id);
+    } else {
+        form_title.text("Add a report");
+        title.val("");
+        details.val("");
+        tags.val("");
+        id.val("");
+    }
+    form.modal('show');
+};
 
 director_support.plugins.livingWAR_addForm=function(){
     var $form = $("<div>")
@@ -46,14 +69,20 @@ director_support.plugins.livingWAR_addForm=function(){
     $("<input>")
         .attr({type:'text',name:'tags',placeholder:'Tags'})
         .appendTo($body);
-    $("<br>")
-        .appendTo($body);
-    $("<span>")
-        .html("Make this visible to all site users?")
-        .appendTo($body);
+//    $("<br>")
+//        .appendTo($body);
+//    $("<span>")
+//        .html("Make this visible to all site users?")
+//        .appendTo($body);
     $("<input>")
+        .css({display:'none'})
         .attr({type:'checkbox',name:'public',checked:true})
         .appendTo($body);
+    $("<input>")
+        .css({display:'none'})
+        .attr({name:'id',value:''})
+        .appendTo($body);
+
     //----------------
 
     var $footer=$("<div>")
@@ -73,11 +102,12 @@ director_support.plugins.livingWAR_addForm=function(){
         .html("Submit")
         .click(function(e){
             e.preventDefault();
+            var url = event_pages.options.root+'director/report/new/';
 
-            $.post(event_pages.options.root+'director/report/new/',
+            $.post(url,
               $body.serialize(),function(data,status,xhr){
                     console.log(data);
-                    if (data.status=='created'){
+                    if (data.status=='created' || data.status=='edited'){
                         $form.modal('hide');
                         $body[0].reset();
 
@@ -132,7 +162,7 @@ director_support.plugins.livingWAR=function(widget,numberDrawn,$content){
             $rpt.tooltip({title:'Non-public report',trigger:'hover',placement:'top'});
         }
         var $a = $('<a>')
-            .attr({href:report.edit_url, target:'_new'})
+            .on('click',function(){director_support.plugins.livingWAR_editForm(report)})
             .tooltip({title:"Edit this report",trigger:'hover',placement:'top'})
             .appendTo($rpt);
         $("<i>")
@@ -174,48 +204,28 @@ director_support.plugins.livingWAR=function(widget,numberDrawn,$content){
 
 
     var $headerdiv = $('#'+director_support.widgetDivName(widget,numberDrawn,'header'));
-    var $addForm = director_support.plugins.livingWAR_addForm();
-    $addForm.appendTo($content);
+    director_support.plugins.livingWAR_modalForm = director_support.plugins.livingWAR_addForm();
+    director_support.plugins.livingWAR_modalForm.appendTo($content);
 
-
-    if (dashboard.permissions.add_report)
-	{
+//    if (dashboard.permissions.add_report) {
     var longUrl=event_pages.options.root+'director/report/add/';
-    var $dd = $("<div>")
-        .addClass("dropdown btn-group")
-        .appendTo($headerdiv);
 
-    var $dd_a = $("<button>")
-        .addClass("btn dropdown-toggle btn-mini")
-        .attr({dataToggle:"dropdown",href:longUrl})
-        .text("Add WAR Item")
-        .appendTo($dd);
-    $("<span>")
-        .addClass("caret")
-        .appendTo($dd_a);
-    var $ul = $("<ul>")
-        .addClass("dropdown-menu")
-        .appendTo($dd);
-    var $l1 = $("<li>")
-        .appendTo($ul);
     $("<a>")
+        .addClass("btn btn-mini")
         .attr({href:"#"})
         .text("Quick Add")
-        .click(function(){
-            $addForm.modal('show');
-        })
-        .appendTo($l1);
+        .on('click',function(){director_support.plugins.livingWAR_editForm()})
+        .appendTo($headerdiv);
 
-    var $l2 = $("<li>")
-        .appendTo($ul);
     $("<a>")
+        .addClass("btn btn-mini")
         .attr({href:longUrl})
         .text("Detailed Add")
         .click(function(){
             document.location.href=longUrl;
         })
-        .appendTo($l2);
-	}
+        .appendTo($headerdiv);
+//	}
 
 };
 

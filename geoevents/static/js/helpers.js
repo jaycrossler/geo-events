@@ -190,6 +190,35 @@ Helpers.buildBootstrapDropdown=function(title,items){
     });
     return $group;
 };
+Helpers.buildBootstrapInputDropdown=function(title,items,$input){
+    var $group = $("<span class='input-append btn-group'>");
+    $("<a class='btn dropdown-toggle btn-mini' data-toggle='dropdown' href='#'>"+title+"<span class='caret'></span></a>")
+        .css({float:"none"})
+        .appendTo($group);
+    var $ul = $("<ul class='dropdown-menu'>")
+        .appendTo($group);
+    _.each(items,function(dd){
+        var $li = $("<li>").appendTo($ul);
+        var $a = $("<a>")
+            .attr({alt:(dd.alt||dd.name||"")})
+            .attr({href:"#"})
+            .on('click',function(val){
+                $input.val(val.currentTarget.innerText);
+            })
+            .appendTo($li);
+        if (dd.imgSrc){
+            $("<img>")
+                .attr({src:dd.imgSrc})
+                .appendTo($a);
+        }
+        $('<span>')
+            .text(dd.title||"Item")
+            .appendTo($a);
+
+
+    });
+    return $group;
+};
 Helpers.tryToMakeDate=function(val,fieldName){
     var returnVal;
     var name = (fieldName && fieldName.toLowerCase) ? fieldName.toLowerCase() : "";

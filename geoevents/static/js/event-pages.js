@@ -31,8 +31,8 @@ event_pages.init=function(){
     if (typeof($)!="undefined" && $('.headerDate')) {
         $('.headerDate').html("Current Date: "+new Date());
     }
-    event_pages.checkAnalytics();
-    event_pages.checkSSO();
+    //event_pages.checkAnalytics();
+    //event_pages.checkSSO();
 
     //TODO: This is an ugly workaround for Openlayers divs being always on top with IE... fix it
     $(document).ready(function() {
