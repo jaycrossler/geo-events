@@ -192,7 +192,7 @@ Helpers.buildBootstrapDropdown=function(title,items){
 };
 Helpers.buildBootstrapInputDropdown=function(title,items,$input){
     var $group = $("<span class='input-append btn-group'>");
-    $("<a class='btn dropdown-toggle btn-mini' data-toggle='dropdown' href='#'>"+title+"<span class='caret'></span></a>")
+    var $group_title = $("<a class='btn dropdown-toggle btn-mini' data-toggle='dropdown' href='#'>"+title+"<span class='caret'></span></a>")
         .css({float:"none"})
         .appendTo($group);
     var $ul = $("<ul class='dropdown-menu'>")
@@ -203,7 +203,9 @@ Helpers.buildBootstrapInputDropdown=function(title,items,$input){
             .attr({alt:(dd.alt||dd.name||"")})
             .attr({href:"#"})
             .on('click',function(val){
-                $input.val(val.currentTarget.innerText);
+                var value = val.currentTarget.innerText
+                $input.val(value);
+                $group_title.val(value);
             })
             .appendTo($li);
         if (dd.imgSrc){

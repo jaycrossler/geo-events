@@ -179,7 +179,7 @@ director_support.plugins.actions.functionFormatDetails=function(table,tr) {
     dates = director_support.plugins.actions.addDateIfExists(dates, rowData.date_closed, "Closed");
     dates = director_support.plugins.actions.addDateIfExists(dates, rowData.date_assigned, "Assigned");
 
-    desc += dates.join(", ")+"<br/>";
+    if (dates && dates.length) desc += dates.join(", ")+"<br/>";
 
     if (rowData.action_notes){
         desc+="<b>Notes: </b>"+rowData.action_notes+"<br/>";
@@ -349,6 +349,10 @@ director_support.plugins.actions.addForm=function(widget){
     $("<input>")
         .attr({type:'text',name:'assigned_to',placeholder:'OPR(s) assigned to'})
         .appendTo($body);
+    $("<input>")
+        .attr({type:'text',name:'date_final_due',placeholder:'Date Due (format: YYYY-MM-DD HH:mm:ss)'})
+        .appendTo($body);
+
     $("<textarea>")
         .attr({name:'action_notes',placeholder:'Detailed tasker description'})
         .appendTo($body);
@@ -366,6 +370,14 @@ director_support.plugins.actions.addForm=function(widget){
         .attr({type:'text',name:'originator',value:dashboard.current_user})
         .css({display:'none'})
         .appendTo($body);
+
+    var dtg = moment();
+    dtg = dtg.format("YYYY-MM-DD HH:mm:ss"); //2014-02-14 05:00:00+00:00
+    $("<input>")
+        .attr({type:'text',name:'date_assigned',value:dtg})
+        .css({display:'none'})
+        .appendTo($body);
+
 
     $("<br>")
         .appendTo($body);
