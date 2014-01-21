@@ -49,6 +49,8 @@ urlpatterns = patterns('',
                              template_name='report.html',
                              ), name='actions-view-report'),
     url(r'^action/new/$', 'geoevents.director.views.ActionNew', name='actions-submit-new'),
+    url(r'^action/add/(?P<success_url>.*)$', ActionCreateView.as_view(template_name='report-manage.html',),
+                             name='actions-manage-report-return'),
     url(r'^action/add/$', permission_required('director.add_actions', reverse_lazy('home'))(
                              ActionCreateView.as_view(template_name='report-manage.html',
                              success_url=reverse_lazy('actions-view-reports'),

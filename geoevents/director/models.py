@@ -612,7 +612,7 @@ class Actions(RatedBase):
     current_status = models.TextField(blank=True, null=True,
                                       help_text="Detailed status of tasker, not describing content of result")
 
-    category = models.CharField(help_text="Tasker Category (e.g. 'AEG Tasker')", max_length=100, blank=True, null=True)
+    category = models.CharField(help_text="Tasker Category (e.g. 'AEG Taskers')", max_length=100, blank=True, null=True)
     hotness = models.IntegerField(help_text="How Hot? 0-5", max_length=2, blank=True, null=True, default=0)
 
     owning_organization = models.ForeignKey(DirectorDashboard,

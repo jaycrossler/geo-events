@@ -75,15 +75,10 @@ director_support.drawWidget=function(widget,$main,numberDrawn){
                         .on('click',function(){director_support.plugins.note_editForm(note, widget.id)})
                         .appendTo($note);
                 }
-
-                $('<span>')
-                    .addClass('content')
-                    .html(note.content || "&lt;no details entered&gt;")
-                    .appendTo($note);
                 if (note.posted_by){
                     var $postedby = $('<span>')
-                        .addClass('posted_by')
-                        .text('Posted by '+note.posted_by)
+                        .addClass('posted_by header-actions pull-right')
+                        .html('<br/>Posted by '+note.posted_by)
                         .appendTo($note);
                     if (note.posted_date){
                         var date = Helpers.dateFromPythonDate(note.posted_date,'');
@@ -94,6 +89,11 @@ director_support.drawWidget=function(widget,$main,numberDrawn){
                         }
                     }
                 }
+
+                $('<span>')
+                    .addClass('content')
+                    .html(note.content || "&lt;no details entered&gt;")
+                    .appendTo($note);
 
             } catch(ex){
                 console.log("Error handling a note within Wiki widget: "+widget.name);
@@ -220,7 +220,6 @@ director_support.drawWidget=function(widget,$main,numberDrawn){
             .attr({href:longUrl})
             .text("Add Formatted Note")
             .appendTo($parentdiv);
-
     }
 
     $content.attr('id',maindiv_name);

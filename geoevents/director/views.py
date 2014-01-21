@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 @csrf_exempt
 def SocialRate(request, model, pk):
     rating = str(request.POST.get("rating", ""))
-    model_obj = get_model('director', model);
+    model_obj = get_model('director', model)
 
     try:
         report = get_object_or_404(model_obj, id=pk)
@@ -39,8 +39,8 @@ def SocialRate(request, model, pk):
         else:
             status = {'status': 'success', 'details': 'rating lookup', 'rating': report.rating_count}
 
-        status['model'] = model;
-        status['id'] = pk;
+        status['model'] = model
+        status['id'] = pk
 
     except Exception as e:
         status = {'status': 'error', 'details': str(e)}
@@ -239,6 +239,13 @@ class ReportCreateView(CreateView):
 
 class ActionCreateView(CreateView):
     """Displays and processes a view to create new action"""
+
+    def get_success_url(self):
+        if 'success_url' in self.kwargs:
+            slug = "/" + self.kwargs['success_url']
+        else:
+            slug = reverse_lazy('home')
+        return slug
 
     model = Actions
     form_class = ActionForm

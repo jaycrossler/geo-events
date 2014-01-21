@@ -37,50 +37,61 @@ director_support.plugins.actions.buildTable=function(widget,numberDrawn,$content
         "sDom": 't<"F">',
         "fnRowCallback":function( tr, rowData, rowNum, rowNumFull ) {
             //After cells are rendered with basic data, spice them up with jQuery
-            var cell_style={fontWeight:'bold',textAlign:'center',whiteSpace:'nowrap'};
+            try {
+                var cell_style={fontWeight:'bold',textAlign:'center',whiteSpace:'nowrap'};
+                var cell_style2={fontWeight:'bold',whiteSpace:'nowrap'};
 
-            var $cell1 = $('td:eq(0)', tr);  //Hot
-            director_support.plugins.actions.setCellHotness(rowData.hotness,$cell1,cell_style);
+                var $cell1 = $('td:eq(0)', tr);  //Hot
+                director_support.plugins.actions.setCellHotness(rowData.hotness,$cell1,cell_style2);
 
-            var $cell2 = $('td:eq(1)', tr)  //ID
-                .css(cell_style)
-                .text(rowData.action_id);
-            var $cell3 = $('td:eq(2)', tr);  //Summary
-            var $cell4 = $('td:eq(3)', tr);  //OPR
-            var $cell5 = $('td:eq(4)', tr);  //Due
-            director_support.plugins.actions.setCellToDate(rowData.date_final_due,$cell5,cell_style);
-            var $cell6 = $('td:eq(5)', tr);  //Status
-            director_support.plugins.actions.setCellToDate(rowData.date_closed,$cell6,cell_style,'Open');
+                var $cell2 = $('td:eq(1)', tr)  //ID
+                    .css(cell_style)
+                    .text(rowData.action_id);
+
+                var $cell3 = $('td:eq(2)', tr);  //Summary
+                director_support.plugins.actions.setCellBackgroundByDate(rowData.date_final_due,$cell3,cell_style);
+
+                var $cell4 = $('td:eq(3)', tr);  //OPR
+                director_support.plugins.actions.setCellBackgroundByDate(rowData.date_final_due,$cell4,cell_style2);
+
+                var $cell5 = $('td:eq(4)', tr);  //Due
+                director_support.plugins.actions.setCellToDate(rowData.date_final_due,$cell5,cell_style);
+
+                var $cell6 = $('td:eq(5)', tr);  //Status
+                director_support.plugins.actions.setCellToDate(rowData.date_closed,$cell6,cell_style,'Open');
 
 
-            $(tr).on('click',function(){
-                var tr = this;
-                if (director_support.plugins.actions.openRow){
-                    $actionTable.fnClose(director_support.plugins.actions.openRow);
-                    director_support.plugins.actions.openRow = null;
-                }else{
-                    $actionTable.fnOpen( tr, director_support.plugins.actions.functionFormatDetails($actionTable, tr), 'details' );
-                    director_support.plugins.actions.openRow = tr;
-                }
-            });
-
-            $(tr).data('action',rowData);
-
-            $(tr).drop(function( ev, dd ){
-                var $target = $(dd.target);
-                var actionData = $target.data('action');
-                var actionID = actionData.id;
-
-                var $source = $(dd.proxy);
-                var reportData = $source.data('report');
-                var reportID = reportData.id;
-
-                var url = event_pages.options.root + "director/report/link/" + reportID + '/related_actions/'+ actionID+'/';
-                $.post(url, function(data,status,xhr){
-                    console.log(data);
+                $(tr).on('click',function(){
+                    var tr = this;
+                    if (director_support.plugins.actions.openRow){
+                        $actionTable.fnClose(director_support.plugins.actions.openRow);
+                        director_support.plugins.actions.openRow = null;
+                    }else{
+                        $actionTable.fnOpen( tr, director_support.plugins.actions.functionFormatDetails($actionTable, tr), 'details' );
+                        director_support.plugins.actions.openRow = tr;
+                    }
                 });
-                $( this ).toggleClass('dropped');
-            });
+
+                $(tr).data('action',rowData);
+
+                $(tr).drop(function( ev, dd ){
+                    var $target = $(dd.target);
+                    var actionData = $target.data('action');
+                    var actionID = actionData.id;
+
+                    var $source = $(dd.proxy);
+                    var reportData = $source.data('report');
+                    var reportID = reportData.id;
+
+                    var url = event_pages.options.root + "director/report/link/" + reportID + '/related_actions/'+ actionID+'/';
+                    $.post(url, function(data,status,xhr){
+                        console.log(data);
+                    });
+                    $( this ).toggleClass('dropped');
+                });
+            } catch(ex) {
+                console.log("Error drawing table information for "+widget.name+" - item "+rowNum);
+            }
 
         },
 
@@ -97,7 +108,7 @@ director_support.plugins.actions.buildTable=function(widget,numberDrawn,$content
                 mDataProp: "description"
             }
             ,{
-                sTitle: "OPR/Assigned to",
+                sTitle: "OPR",
                 mDataProp: "assigned_to"
             }
             ,{
@@ -119,7 +130,15 @@ director_support.plugins.actions.buildTable=function(widget,numberDrawn,$content
 
 
     if  (dashboard.permissions.add_action){
+        var root_minus_slash = event_pages.options.root;
+        if (root_minus_slash == "/") root_minus_slash = "";
+
         var longUrl=event_pages.options.root+'director/action/add/';
+        longUrl += root_minus_slash + 'director/board/' + dashboard.id + '/';
+        if (widget.data && widget.data.category) {
+            longUrl += "#"+widget.data.category;
+        }
+
         $("<a>")
             .addClass("btn btn-mini")
             .attr({href:"#"})
@@ -224,25 +243,33 @@ director_support.plugins.actions.addTimelineItem=function(action){
 };
 
 director_support.plugins.actions.setCellToDate=function(date,$cell,cell_style,empty_text){
-//Thai Colors:    var days_colors = ['red','yellow','pink','green','orange','blue','purple'];
-    var days_colors = ['maroon','white','orange','green','gold','lightblue','darkblue'];
+
+    director_support.plugins.actions.setCellBackgroundByDate(date, $cell, cell_style);
 
     var date_data = Helpers.dateFromPythonDate(date,'');
     if (date_data) {
-        var day_of_week = moment.day();
-        var day_color = days_colors[day_of_week];
-        cell_style.backgroundColor = day_color;
-
         $cell
-            .css(cell_style)
             .tooltip({title:date_data.calendar(),action:'hover'})
             .text(date_data.fromNow());
         if (Helpers.dateCameBefore(date_data)) $cell.css({color:'red'});
     } else {
         $cell
-            .css(cell_style)
             .text(empty_text||"--");
     }
+};
+director_support.plugins.actions.setCellBackgroundByDate=function(date,$cell,cell_style){
+//Thai Colors:    var days_colors = ['red','yellow','pink','green','orange','blue','purple'];
+    var days_colors = ['maroon','white','orange','green','gold','lightblue','darkblue'];
+    cell_style = cell_style || {};
+
+    var date_data = Helpers.dateFromPythonDate(date,'');
+    if (date_data) {
+        var day_of_week = date_data.day();
+        var day_color = days_colors[day_of_week];
+        cell_style.backgroundColor = day_color;
+        if (Helpers.dateCameBefore(date_data)) $cell.css({color:'red'});
+    }
+    $cell.css(cell_style)
 };
 
 director_support.plugins.actions.setCellHotness=function(hotness,$cell,cell_style){
@@ -250,13 +277,20 @@ director_support.plugins.actions.setCellHotness=function(hotness,$cell,cell_styl
     var hotness_icons = ['','hot1.png','hot2.png','hot3.png','hot4.gif','hot5.gif','hot6.gif'];
     var hotness_dir = event_pages.options.staticRoot + "images/hotness/";
 
-    hotness = parseInt(hotness);
+    try {
+        hotness = parseInt(hotness);
+    } catch(ex){
+        hotness = 0;
+    }
+    if (hotness < 7){
+        hotness = 0;
+    }
     var hotness_image_string = '';
     var hotness_icon = hotness_dir + hotness_icons[hotness];
     if (hotness > 3) {
         cell_style.backgroundColor = 'red';
     }
-    if (hotness > 1) {
+    if (hotness > 0) {
        hotness_image_string = "<img src='"+hotness_icon+"'/> ("+hotness+")";
     }
     $cell

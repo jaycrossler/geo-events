@@ -19,9 +19,9 @@ class DashboardWidgetsInline(admin.StackedInline):
     fieldsets = (
         (None, {'fields': normal_fields}),
         ('Advanced Settings', {'classes': ('collapse',),
-                               'description': 'The settings below are advanced.  Please contact an admin if you have questions.',
+                               'description': 'The settings below are advanced.',
                                'fields': advanced_fields,
-        }))
+                               }))
 
 
 class ProgramObservationInline(admin.StackedInline):
@@ -29,17 +29,17 @@ class ProgramObservationInline(admin.StackedInline):
     extra = 1
 
     normal_fields = (('entered_by', 'rating_count'), (
-    'metric_overall', 'trend_overall', 'metric_cost', 'trend_cost', 'metric_schedule', 'trend_schedule',
-    'metric_performance', 'trend_performance',), )
+        'metric_overall', 'trend_overall', 'metric_cost', 'trend_cost', 'metric_schedule', 'trend_schedule',
+        'metric_performance', 'trend_performance',), )
     advanced_fields = (
-    'classification', 'pm_observation', 'summary_overall', 'summary_cost', 'budget_cost', 'execution_cost',
-    'funds_cost', 'summary_schedule', 'summary_performance', 'issues_performance', 'risk_performance',)
+        'classification', 'pm_observation', 'summary_overall', 'summary_cost', 'budget_cost', 'execution_cost',
+        'funds_cost', 'summary_schedule', 'summary_performance', 'issues_performance', 'risk_performance',)
     fieldsets = (
         (None, {'fields': normal_fields}),
         ('Detailed Descriptions', {'classes': ('collapse',),
                                    'description': 'Details of the above ratings.',
                                    'fields': advanced_fields,
-        }))
+                                   }))
 
 
 class LinkInline(admin.StackedInline):
@@ -51,9 +51,9 @@ class LinkInline(admin.StackedInline):
     fieldsets = (
         (None, {'fields': normal_fields}),
         ('Advanced Settings', {'classes': ('collapse',),
-                               'description': 'The settings below are advanced.  Please contact an admin if you have questions.',
+                               'description': 'The settings below are advanced.',
                                'fields': advanced_fields,
-        }))
+                               }))
 
 
 class ReportAdmin(admin.ModelAdmin):
@@ -98,13 +98,13 @@ class DirectorDashboardAdmin(admin.ModelAdmin):
 
     normal_fields = (('org', 'name'), 'owner', 'tags',)
     advanced_fields = (
-    'site_icon', 'status', 'type', 'related_program_groups', 'related_links', 'tracking_code', 'director_billets',)
+        'site_icon', 'status', 'type', 'related_program_groups', 'related_links', 'tracking_code', 'director_billets',)
     fieldsets = (
         (None, {'fields': normal_fields}),
         ('Advanced Settings', {'classes': ('collapse',),
-                               'description': 'The settings below are advanced.  Please contact an admin if you have questions.',
+                               'description': 'The settings below are advanced.',
                                'fields': advanced_fields,
-        }))
+                               }))
 
 
 class ActionsAdmin(admin.ModelAdmin):
@@ -123,9 +123,9 @@ class PageWidgetAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': normal_fields}),
         ('Advanced Settings', {'classes': ('collapse',),
-                               'description': 'The settings below are advanced.  Please contact an admin if you have questions.',
+                               'description': 'The settings below are advanced.',
                                'fields': advanced_fields,
-        }))
+                               }))
 
     def number_of_dashboards(self, obj):
         if DirectorDashboard.active_objects:
