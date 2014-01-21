@@ -407,14 +407,18 @@ director_support.plugins.actions.addForm=function(widget){
             $.post(event_pages.options.root+'director/action/new/',
                 $body.serialize(),function(data,status,xhr){
                     console.log(data);
-                    $submit.text("Created");
 
                     if (data.status=='created'||data.status=='modified'){
+                        $submit.text("Created");
                         $form.modal('hide');
                         $body[0].reset();
 
                         //TODO: Refresh just the widget to reload data
                         document.location.reload();
+                    } else {
+                        $submit
+                            .text("Error")
+                            .attr('disabled',false);
                     }
                 }
             );

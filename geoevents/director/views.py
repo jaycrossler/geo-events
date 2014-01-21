@@ -279,7 +279,10 @@ def ActionNew(request):
         ##TODO: Have it work for non-logged in users
 
     try:
-        hotness = int(float(hotness))
+        try:
+            hotness = int(float(hotness))
+        except:
+            hotness = 0
 
         if action_id:
             new_action = Actions(action_id=action_id, description=description, assigned_to=assigned_to,
