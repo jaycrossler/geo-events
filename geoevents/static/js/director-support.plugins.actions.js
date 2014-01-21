@@ -30,6 +30,7 @@ director_support.plugins.actions.buildTable=function(widget,numberDrawn,$content
     actions_data = actions_data || [];
     $actionTable.dataTable( {
         "bJQueryUI": true,
+        "aaSorting": [[ 4, "asc"]],
         "aaData": actions_data,
         "sProcessing":true,
         "bScrollInfinite": (Helpers.isIOS ? false : true),
@@ -42,14 +43,15 @@ director_support.plugins.actions.buildTable=function(widget,numberDrawn,$content
                 var cell_style2={fontWeight:'bold',whiteSpace:'nowrap'};
 
                 var $cell1 = $('td:eq(0)', tr);  //Hot
-                director_support.plugins.actions.setCellHotness(rowData.hotness,$cell1,cell_style2);
+                director_support.plugins.actions.setCellHotness(rowData.hotness,$cell1,cell_style);
+                director_support.plugins.actions.setCellBackgroundByDate(rowData.date_final_due,$cell1,cell_style);
 
                 var $cell2 = $('td:eq(1)', tr)  //ID
-                    .css(cell_style)
                     .text(rowData.action_id);
+                director_support.plugins.actions.setCellBackgroundByDate(rowData.date_final_due,$cell2,cell_style2);
 
                 var $cell3 = $('td:eq(2)', tr);  //Summary
-                director_support.plugins.actions.setCellBackgroundByDate(rowData.date_final_due,$cell3,cell_style);
+                director_support.plugins.actions.setCellBackgroundByDate(rowData.date_final_due,$cell3,cell_style2);
 
                 var $cell4 = $('td:eq(3)', tr);  //OPR
                 director_support.plugins.actions.setCellBackgroundByDate(rowData.date_final_due,$cell4,cell_style2);
@@ -123,11 +125,9 @@ director_support.plugins.actions.buildTable=function(widget,numberDrawn,$content
         ]
     } );
 
-
     var $headerdiv = $('#'+director_support.widgetDivName(widget,numberDrawn,'header'));
     var $addForm = director_support.plugins.actions.addForm(widget);
     $addForm.appendTo($content);
-
 
     if  (dashboard.permissions.add_action){
         var root_minus_slash = event_pages.options.root;
@@ -168,24 +168,17 @@ director_support.plugins.actions.functionFormatDetails=function(table,tr) {
 
     var desc = "";
     if (rowData.originator){
-        desc+="<b>Tasker: </b>"+rowData.originator+"<br/>";
+        desc+="<b>Tasker: </b>"+ _.str.trim(rowData.originator)+"<br/>";
     }
+
     var dates = [];
-    if (rowData.date_assigned && rowData.date_assigned!="None"){
-        dates.push("<b>Assigned: </b>"+rowData.date_assigned);
-    }
-    if (rowData.date_updated && rowData.date_updated!="None"){
-        dates.push("<b>Updated: </b>"+rowData.date_updated);
-    }
-    if (rowData.date_plan_due && rowData.date_plan_due!="None"){
-        dates.push("<b>Plan Due: </b>"+rowData.date_plan_due);
-    }
-    if (rowData.date_final_due && rowData.date_final_due!="None"){
-        dates.push("<b>Due: </b>"+rowData.date_final_due);
-    }
-    if (rowData.date_closed && rowData.date_closed!="None"){
-        dates.push("<b>Closed: </b>"+rowData.date_closed);
-    }
+    dates = director_support.plugins.actions.addDateIfExists(dates, rowData.date_assigned, "Assigned");
+    dates = director_support.plugins.actions.addDateIfExists(dates, rowData.date_updated, "Updated");
+    dates = director_support.plugins.actions.addDateIfExists(dates, rowData.date_plan_due, "Plan Due");
+    dates = director_support.plugins.actions.addDateIfExists(dates, rowData.date_final_due, "Due");
+    dates = director_support.plugins.actions.addDateIfExists(dates, rowData.date_closed, "Closed");
+    dates = director_support.plugins.actions.addDateIfExists(dates, rowData.date_assigned, "Assigned");
+
     desc += dates.join(", ")+"<br/>";
 
     if (rowData.action_notes){
@@ -203,6 +196,13 @@ director_support.plugins.actions.functionFormatDetails=function(table,tr) {
     return $details;
 };
 
+director_support.plugins.actions.addDateIfExists=function(dates, date, pre_text){
+    if (date && date!="None"){
+        var dtg = Helpers.dateFromPythonDate(date);
+        if (dtg) dates.push("<b>"+pre_text+": </b>"+dtg.format("YYYY-MM-DD")+": "+dtg.calendar());
+    }
+    return dates;
+};
 
 director_support.plugins.actions.addTimelineItem=function(action){
 
@@ -274,7 +274,7 @@ director_support.plugins.actions.setCellBackgroundByDate=function(date,$cell,cel
 
 director_support.plugins.actions.setCellHotness=function(hotness,$cell,cell_style){
 
-    var hotness_icons = ['','hot1.png','hot2.png','hot3.png','hot4.gif','hot5.gif','hot6.gif'];
+    var hotness_icons = ['','hot1.png','hot2.png','hot3.png','hot4.gif','hot5.gif'];
     var hotness_dir = event_pages.options.staticRoot + "images/hotness/";
 
     try {
@@ -282,14 +282,15 @@ director_support.plugins.actions.setCellHotness=function(hotness,$cell,cell_styl
     } catch(ex){
         hotness = 0;
     }
-    if (hotness < 7){
+    if (hotness > 5){
+        hotness = 5;
+    }
+    if (hotness < 0){
         hotness = 0;
     }
+
     var hotness_image_string = '';
     var hotness_icon = hotness_dir + hotness_icons[hotness];
-    if (hotness > 3) {
-        cell_style.backgroundColor = 'red';
-    }
     if (hotness > 0) {
        hotness_image_string = "<img src='"+hotness_icon+"'/> ("+hotness+")";
     }
@@ -381,17 +382,22 @@ director_support.plugins.actions.addForm=function(widget){
             $form.modal('hide');
         })
         .appendTo($footer);
-    $("<button>")
+    var $submit = $("<button>")
         .addClass("btn")
         .attr({dataDismiss:"modal",ariaHidden:"true"})
         .html("Submit")
         .click(function(e){
             e.preventDefault();
+            $submit
+                .text("Sending...")
+                .attr('disabled',true);
 
             $.post(event_pages.options.root+'director/action/new/',
                 $body.serialize(),function(data,status,xhr){
                     console.log(data);
-                    if (data.status=='created'){
+                    $submit.text("Created");
+
+                    if (data.status=='created'||data.status=='modified'){
                         $form.modal('hide');
                         $body[0].reset();
 

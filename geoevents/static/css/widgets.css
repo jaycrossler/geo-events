@@ -1,3 +1,6 @@
+.dataTables_scrollHeadInner th {
+    font-size: 10px;
+}
 .highlightBorder {
     border: 3px dashed green;
 }

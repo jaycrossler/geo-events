@@ -78,7 +78,7 @@ director_support.drawWidget=function(widget,$main,numberDrawn){
                 if (note.posted_by){
                     var $postedby = $('<span>')
                         .addClass('posted_by header-actions pull-right')
-                        .html('<br/>Posted by '+note.posted_by)
+                        .html('Posted by '+note.posted_by)
                         .appendTo($note);
                     if (note.posted_date){
                         var date = Helpers.dateFromPythonDate(note.posted_date,'');
