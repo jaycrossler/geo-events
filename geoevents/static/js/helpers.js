@@ -192,9 +192,16 @@ Helpers.buildBootstrapDropdown=function(title,items){
 };
 Helpers.buildBootstrapInputDropdown=function(title,items,$input){
     var $group = $("<span class='input-append btn-group'>");
-    var $group_title = $("<a class='btn dropdown-toggle btn-mini' data-toggle='dropdown' href='#'>"+title+"<span class='caret'></span></a>")
+    var $group_holder = $("<a class='btn dropdown-toggle btn-mini' data-toggle='dropdown' href='#'>")
         .css({float:"none"})
         .appendTo($group);
+    var $group_title = $("<span>")
+        .text(title)
+        .appendTo($group_holder);
+    $("<span>")
+        .addClass('caret')
+        .appendTo($group_holder);
+
     var $ul = $("<ul class='dropdown-menu'>")
         .appendTo($group);
     _.each(items,function(dd){

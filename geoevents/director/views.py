@@ -270,6 +270,8 @@ def ActionNew(request):
     category = request.POST.get("category", "")
     hotness = request.POST.get("hotness", "0")
     action_notes = request.POST.get("action_notes", "")
+    date_final_due = request.POST.get("date_final_due", "")
+    date_assigned = request.POST.get("date_assigned", "")
     owning_organization = request.POST.get("owning_organization", "")
     originator = request.POST.get("originator", "")
     if not originator:
@@ -281,7 +283,8 @@ def ActionNew(request):
 
         if action_id:
             new_action = Actions(action_id=action_id, description=description, assigned_to=assigned_to,
-                                 action_notes=action_notes, category=category, hotness=hotness)
+                                 action_notes=action_notes, category=category, hotness=hotness,
+                                 date_final_due=date_final_due, date_assigned=date_assigned)
 
             if originator:
                 user = User.objects.get(username=originator)
