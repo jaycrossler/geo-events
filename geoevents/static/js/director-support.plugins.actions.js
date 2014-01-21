@@ -168,7 +168,7 @@ director_support.plugins.actions.functionFormatDetails=function(table,tr) {
 
     var desc = "";
     if (rowData.originator){
-        desc+="<b>Tasker: </b>"+ _.str.trim(rowData.originator)+"<br/>";
+        desc+="<b>Task Entered By: </b>"+ _.str.trim(rowData.originator)+"<br/>";
     }
 
     var dates = [];
@@ -177,7 +177,6 @@ director_support.plugins.actions.functionFormatDetails=function(table,tr) {
     dates = director_support.plugins.actions.addDateIfExists(dates, rowData.date_plan_due, "Plan Due");
     dates = director_support.plugins.actions.addDateIfExists(dates, rowData.date_final_due, "Due");
     dates = director_support.plugins.actions.addDateIfExists(dates, rowData.date_closed, "Closed");
-    dates = director_support.plugins.actions.addDateIfExists(dates, rowData.date_assigned, "Assigned");
 
     if (dates && dates.length) desc += dates.join(", ")+"<br/>";
 
@@ -199,7 +198,7 @@ director_support.plugins.actions.functionFormatDetails=function(table,tr) {
 director_support.plugins.actions.addDateIfExists=function(dates, date, pre_text){
     if (date && date!="None"){
         var dtg = Helpers.dateFromPythonDate(date);
-        if (dtg) dates.push("<b>"+pre_text+": </b>"+dtg.format("YYYY-MM-DD")+": "+dtg.calendar());
+        if (dtg) dates.push("<b>"+pre_text+": </b>"+dtg.format("YYYY-MM-DD"));
     }
     return dates;
 };
