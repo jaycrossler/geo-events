@@ -203,9 +203,9 @@ Helpers.buildBootstrapInputDropdown=function(title,items,$input){
             .attr({alt:(dd.alt||dd.name||"")})
             .attr({href:"#"})
             .on('click',function(val){
-                var value = val.currentTarget.innerText
+                var value = val.currentTarget.innerText;
                 $input.val(value);
-                $group_title.val(value);
+                $group_title.text(value);
             })
             .appendTo($li);
         if (dd.imgSrc){

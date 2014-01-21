@@ -328,7 +328,7 @@ director_support.plugins.actions.addForm=function(widget){
 //        .appendTo($body);
 
     var $hotness = $("<input>")
-        .attr({type:'text',name:'hotness',placeholder:'Hotness (from 0 to 5'})
+        .attr({type:'text',name:'hotness',placeholder:'Hotness (from 0 to 5)'})
         .css({display:'none'})
         .appendTo($body);
     var hotness_items = [{title:0},
@@ -350,7 +350,7 @@ director_support.plugins.actions.addForm=function(widget){
         .attr({type:'text',name:'assigned_to',placeholder:'OPR(s) assigned to'})
         .appendTo($body);
     $("<input>")
-        .attr({type:'text',name:'date_final_due',placeholder:'Date Due (format: YYYY-MM-DD HH:mm:ss)'})
+        .attr({type:'text',name:'date_final_due',placeholder:'Date Due (YYYY-MM-DD)'})
         .appendTo($body);
 
     $("<textarea>")
