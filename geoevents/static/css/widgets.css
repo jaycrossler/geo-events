@@ -1,3 +1,7 @@
+.landing-page-header a.btn{
+    margin: 1px;
+    opacity: 0.8;
+}
 .dataTables_scrollHeadInner th {
     font-size: 10px;
 }
