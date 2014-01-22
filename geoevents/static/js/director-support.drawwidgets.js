@@ -55,12 +55,13 @@ director_support.drawWidget=function(widget,$main,numberDrawn){
     if (widget.type=='Wiki') {
         //TODO: Move this Wiki formatting into a JS plugin
         var $content_inner=$('<div>');
-        _.each(widget.notes,function(note){
+        _.each(widget.notes,function(note, i){
             try{
-//                note = JSON.parse(note);
                 var $note = $('<div>')
                     .addClass('note')
                     .appendTo($content_inner);
+                if (i % 2 == 0) $note.addClass('note_even');
+
                 if (note.title){
                     $('<span>')
                         .addClass('title')
@@ -161,7 +162,7 @@ director_support.drawWidget=function(widget,$main,numberDrawn){
         if (widget.description || title_subtext){
             $title_text
                 .css('cursor','pointer')
-                .popover({title:title_subtext || widget.name,content:widget.description || "", trigger:'hover',placement:'top'})
+                .popover({title:title_subtext || widget.name,content:widget.description || "", trigger:'hover',placement:'top'});
         }
     } else {
         //TODO: make empty divs with same names so other parent/holder calls don't fail

@@ -280,7 +280,7 @@ director_support.plugins.actions.setCellBackgroundByDate=function(date,$cell,cel
 
 director_support.plugins.actions.setCellHotness=function(hotness,$cell,cell_style){
 
-    var hotness_icons = ['','hot1.png','hot2.png','hot3.png','hot4.gif','hot5.gif'];
+    var hotness_icons = ['','hot1a.png','hot2.png','hot3.png','hot4.gif','hot5.gif'];
     var hotness_dir = event_pages.options.staticRoot + "images/hotness/";
 
     try {
@@ -337,12 +337,14 @@ director_support.plugins.actions.addForm=function(widget){
         .attr({type:'text',name:'hotness',placeholder:'Hotness (from 0 to 5)'})
         .css({display:'none'})
         .appendTo($body);
+    var hotness_dir = event_pages.options.staticRoot + "images/hotness/";
     var hotness_items = [{title:0},
-        {title:1,imgSrc:'/static/images/hotness/hot1.png'},
-        {title:2,imgSrc:'/static/images/hotness/hot2.png'},
-        {title:3,imgSrc:'/static/images/hotness/hot3.png'},
-        {title:4,imgSrc:'/static/images/hotness/hot4.gif'},
-        {title:5,imgSrc:'/static/images/hotness/hot5.gif'}];
+        {title:1,imgSrc:hotness_dir+'hot1a.png'},
+        {title:2,imgSrc:hotness_dir+'hot2.png'},
+        {title:3,imgSrc:hotness_dir+'hot3.png'},
+        {title:4,imgSrc:hotness_dir+'hot4.gif'},
+        {title:5,imgSrc:hotness_dir+'hot5.gif'}];
+
     Helpers.buildBootstrapInputDropdown('Hotness',hotness_items,$hotness)
         .appendTo($body);
 
