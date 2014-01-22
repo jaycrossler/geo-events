@@ -53,14 +53,14 @@ director_support.plugins.actions.buildTable=function(widget,numberDrawn,$content
                 var $cell3 = $('td:eq(2)', tr);  //Summary
                 director_support.plugins.actions.setCellBackgroundByDate(rowData.date_final_due,$cell3,cell_style2);
 
-                var $cell4 = $('td:eq(3)', tr);  //OPR
-                director_support.plugins.actions.setCellBackgroundByDate(rowData.date_final_due,$cell4,cell_style2);
+//                var $cell4 = $('td:eq(3)', tr);  //OPR
+//                director_support.plugins.actions.setCellBackgroundByDate(rowData.date_final_due,$cell4,cell_style2);
 
-                var $cell5 = $('td:eq(4)', tr);  //Due
+                var $cell5 = $('td:eq(3)', tr);  //Due
                 director_support.plugins.actions.setCellToDate(rowData.date_final_due,$cell5,cell_style);
 
-                var $cell6 = $('td:eq(5)', tr);  //Status
-                director_support.plugins.actions.setCellToDate(rowData.date_closed,$cell6,cell_style,'Open');
+//                var $cell6 = $('td:eq(5)', tr);  //Status
+//                director_support.plugins.actions.setCellToDate(rowData.date_closed,$cell6,cell_style,'Open');
 
 
                 $(tr).on('click',function(){
@@ -109,18 +109,18 @@ director_support.plugins.actions.buildTable=function(widget,numberDrawn,$content
                 sTitle: "Summary",
                 mDataProp: "description"
             }
-            ,{
-                sTitle: "OPR",
-                mDataProp: "assigned_to"
-            }
+//            ,{
+//                sTitle: "OPR",
+//                mDataProp: "assigned_to"
+//            }
             ,{
                 sTitle: "Due",
                 mDataProp: "date_final_due"
             }
-            ,{
-                sTitle: "Status",
-                mDataProp: "date_closed"
-            }
+//            ,{
+//                sTitle: "Status",
+//                mDataProp: "date_closed"
+//            }
 
         ]
     } );
@@ -180,11 +180,18 @@ director_support.plugins.actions.functionFormatDetails=function(table,tr) {
 
     if (dates && dates.length) desc += dates.join(", ")+"<br/>";
 
+    if (rowData.assigned_to){
+        desc+="<b>OPR(s) assigned to: </b>"+rowData.assigned_to+"<br/>";
+    }
     if (rowData.action_notes){
         desc+="<b>Notes: </b>"+rowData.action_notes+"<br/>";
     }
-    if (rowData.current_status){
+    if (rowData.current_status && rowData.current_status!="None"){
         desc+="<b>Current Status: </b>"+rowData.current_status+"<br/>";
+    }
+    if (rowData.status){
+        var status_text = ['Closed','Pending','Open'][parseInt(rowData.status)];
+        desc+="<b>Status of Tasker: </b>"+status_text+"<br/>";
     }
 
     var $tr = $('<div>')
