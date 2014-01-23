@@ -209,8 +209,8 @@ Helpers.buildBootstrapInputDropdown=function(title,items,$input){
         var $a = $("<a>")
             .attr({alt:(dd.alt||dd.name||"")})
             .attr({href:"#"})
-            .on('click',function(val){
-                var value = val.currentTarget.innerText;
+            .on('click',function(){
+                var value = $(this).text();
                 $input.val(value);
                 $group_title.text(value);
             })
