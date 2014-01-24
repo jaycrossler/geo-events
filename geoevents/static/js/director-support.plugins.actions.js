@@ -280,7 +280,7 @@ director_support.plugins.actions.setCellBackgroundByDate=function(date,$cell,cel
 
 director_support.plugins.actions.setCellHotness=function(hotness,$cell,cell_style){
 
-    var hotness_icons = ['','hot1a.png','hot2.png','hot3.png','hot4.gif','hot5.gif'];
+    var hotness_icons = ['','hot1.png','hot2.png','hot3.png','hot4.gif','hot5.gif'];
     var hotness_dir = event_pages.options.staticRoot + "images/hotness/";
 
     try {
@@ -343,7 +343,7 @@ director_support.plugins.actions.addForm=function(widget){
         .appendTo($body);
     var hotness_dir = event_pages.options.staticRoot + "images/hotness/";
     var hotness_items = [{title:0},
-        {title:1,imgSrc:hotness_dir+'hot1a.png'},
+        {title:1,imgSrc:hotness_dir+'hot1.png'},
         {title:2,imgSrc:hotness_dir+'hot2.png'},
         {title:3,imgSrc:hotness_dir+'hot3.png'},
         {title:4,imgSrc:hotness_dir+'hot4.gif'},
