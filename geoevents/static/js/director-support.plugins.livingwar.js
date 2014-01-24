@@ -59,6 +59,9 @@ director_support.plugins.livingWAR_addForm=function(){
     var $body=$("<form>")
         .addClass("modal-body")
         .appendTo($form);
+    if (event_pages.options.csrf){
+        $(event_pages.options.csrf).appendTo($form);
+    }
     //----------------
     $("<input>")
         .attr({type:'text',name:'title',placeholder:'Short title of report'})

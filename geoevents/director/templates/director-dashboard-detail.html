@@ -75,6 +75,7 @@ $(document).ready(function() {
 
     event_pages.options.staticRoot = '{{STATIC_URL}}';
     event_pages.options.root = '{% url "home" %}';
+    event_pages.options.csrf = "{% csrf_token %}";
 
     settings = {{settings|safe}};
     settings = event_pages.turnSettingsIntoObject(settings);

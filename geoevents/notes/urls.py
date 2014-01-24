@@ -46,7 +46,6 @@ urlpatterns = patterns('',
                        url(r'^delete/(?P<pk>\d+)/$',
                            permission_required('notes.delete_note', reverse_lazy('home'))(DeleteView.as_view(model=Note,
                                                                                                              template_name='generic-delete.html',
-                                                                                                             success_url=reverse_lazy(
-                                                                                                                 'notes-view-notes'))
+                                                                                                             success_url=reverse_lazy('notes-view-notes'))
                            ), name='notes-delete-note-id'),
 )

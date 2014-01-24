@@ -1,3 +1,9 @@
+div.widget_holder {
+    max-height: 350px;
+    display: inline-block;
+    vertical-align: top;
+    padding: 4px;
+}
 .landing-page-header a.btn{
     margin: 1px;
     opacity: 0.8;

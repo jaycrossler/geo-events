@@ -4,6 +4,9 @@ director_support.plugins.timelineForAllPageContent=function(widget,numberDrawn,$
         .appendTo($content);
     var $timelineForm = $('<form id="timeline-item-form" class="no-margin">')
         .appendTo($timelineHead);
+    if (event_pages.options.csrf){
+        $(event_pages.options.csrf).appendTo($timelineForm);
+    }
     var $tl_modal = $('<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> <h3>Add Item to Timeline</h3></div>')
         .appendTo($timelineForm);
     var $tl_modal_foot = $('<div class="modal-footer"><a href="#" id="timeline-modal-clear" class="btn">Clear</a><a href="#" data-dismiss="modal" class="btn">Close</a><button type="submit" class="btn btn-primary">Submit</button></div>')

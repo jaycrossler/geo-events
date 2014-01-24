@@ -241,6 +241,16 @@ Helpers.tryToMakeDate=function(val,fieldName){
 
     return (returnVal || val);
 };
+Helpers.extractCSRF=function(returnAppendedPostText){
+    var ret_form_val = "";
+    if (typeof event_pages!="undefined" && event_pages.options && event_pages.options.csrf){
+        var csrf = event_pages.options.csrf;
+        var pieces = csrf.split("'");
+        ret_form_val = pieces[6] || "";
+        if (returnAppendedPostText) ret_form_val = "&csrfmiddlewaretoken="+ret_form_val;
+    }
+    return ret_form_val;
+};
 (function($){
     // eventType - "click", "mouseover" etc.
     // destination - either jQuery object, dom element or selector

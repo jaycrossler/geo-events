@@ -459,7 +459,7 @@ $(document).ready(function() {
     <div class="row-fluid">
 
         <div class="modal hide fade" id="myModal">
-            <form id="lesson-learned-form" class="no-margin">
+            <form id="lesson-learned-form" class="no-margin">{% csrf_token %}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3>Add Lesson Learned</h3>
@@ -494,7 +494,7 @@ $(document).ready(function() {
             <span class="btn btn-mini" id="timeline_size_change">Increase Height</span>
         </h3>
         <div class="modal hide fade" id="timeline-modal">
-            <form id="timeline-item-form" class="no-margin">
+            <form id="timeline-item-form" class="no-margin">{% csrf_token %}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3>Add Item to Timeline</h3>

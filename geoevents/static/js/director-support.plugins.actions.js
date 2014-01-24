@@ -328,6 +328,10 @@ director_support.plugins.actions.addForm=function(widget){
     var $body=$("<form>")
         .addClass("modal-body")
         .appendTo($form);
+    if (event_pages.options.csrf){
+        $(event_pages.options.csrf).appendTo($form);
+    }
+
     //----------------
 //    $("<input>")
 //        .attr({type:'text',name:'hotness',placeholder:'1', length:2})

@@ -21,7 +21,6 @@ import json
 logger = logging.getLogger(__name__)
 
 
-@csrf_exempt
 def SocialRate(request, model, pk):
     rating = str(request.POST.get("rating", ""))
     model_obj = get_model('director', model)
@@ -262,7 +261,6 @@ class ActionCreateView(CreateView):
         return super(ActionCreateView, self).get(request, *args, **kwargs)
 
 
-@csrf_exempt
 def ActionNew(request):
     action_id = request.POST.get("action_id", "")
     description = request.POST.get("description", "")
@@ -328,7 +326,6 @@ class BilletCreateView(CreateView):
         return super(BilletCreateView, self).get(request, *args, **kwargs)
 
 
-@csrf_exempt
 def BilletNew(request):
     status = {'status': 'not yet implemented'}
 

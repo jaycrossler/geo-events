@@ -120,15 +120,19 @@ director_support.drawWidget=function(widget,$main,numberDrawn){
     if (widget.type=="iFrame" && widget.iframe_url){
         title_link = widget.iframe_url;
     }
-    var widget_span = '';
-    if (widget.width < 12) {
-       widget_span ='span'+(widget.width||6);
-    }
 
     var $widget = $('<div>')
-        .addClass(widget_span)
         .attr('id',holderdiv_name)
+        .addClass('widget_holder')
         .appendTo($main);
+    if (widget.width < 12 && widget.width > 0) {
+        var widget_width = parseFloat(widget.width/12) -.015;
+        widget_width = parseInt(widget_width * 100);
+        $widget.css({width:widget_width+'%'});
+    } else {
+        $widget.css({width:'100%',display:'block'});
+    }
+
     if (widget.height){
         $widget.css('max-height',widget.height+'px');
     }
@@ -245,6 +249,10 @@ director_support.addSocialUI=function(variablePointer,model,id){
     var ratingIncrease=function(amt){
         variablePointer+=amt;
         var vars='rating='+(amt>0?"increase":"decrease");
+
+        var csrf=Helpers.extractCSRF(true);
+        if (csrf) vars+=csrf;
+
         var url=event_pages.options.root+'director/rate/'+model+'/'+id+'/';
 
         $.post(url,
@@ -490,6 +498,9 @@ director_support.plugins.note_addForm=function(){
         .addClass("modal-body")
         .appendTo($form);
 
+    if (event_pages.options.csrf){
+        $(event_pages.options.csrf).appendTo($form);
+    }
     //----------------
     $("<input>")
         .attr({type:'text',name:'title',placeholder:'Short title of note'})
