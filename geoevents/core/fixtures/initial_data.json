@@ -118,5 +118,13 @@
         "name": "header_banner_background_color", 
         "value": "green"
     }
+},
+{
+    "pk": 16,
+    "model": "core.setting",
+    "fields": {
+        "name": "serverurl_proxy_url_local",
+        "value": "/proxy/"
+    }
 }
 ]

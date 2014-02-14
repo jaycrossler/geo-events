@@ -174,7 +174,7 @@ event_pages.isLocal = function(){
 
 event_pages.which_proxy=function(url){
     //By default, return default proxy. If local, use /proxy. If not, use setting or /events/
-    var proxy = event_pages.isLocal()?'/proxy/':(event_pages.settings.serverurl_proxy_url_local || '/events/proxies/proxy.jsp?');
+    var proxy = event_pages.isLocal()?'/proxy/':(settings.serverurl_proxy_url_local || event_pages.settings.serverurl_proxy_url_local || '/proxy/');
     var useEncode = false;
 
 
