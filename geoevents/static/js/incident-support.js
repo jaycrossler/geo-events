@@ -522,7 +522,8 @@ incident_support.configureMap=function(){
             layer_widgets.updateResultWidgets(map);
         }
 
-        incident_support.registerMapMove(mapState);
+        //TODO: Add Metaproxy code back in
+//        incident_support.registerMapMove(mapState);
     });
 
     var addChangeStateChange = function(e){
