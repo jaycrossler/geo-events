@@ -499,9 +499,9 @@ incident_support.configureMap=function(){
             var usngText = usngCoords.usngString;
 
             if (maptools.inUSBounds(lonlat)) {
-                ngText += "USNG: "+usngText;
+                ngText += ", USNG: "+usngText;
             } else {
-                ngText += "MGRS: "+usngText;
+                ngText += ", MGRS: "+usngText;
             }
             if (ngText && ngText.indexOf && ngText.indexOf('NaN')>0) ngText='';
             text += ngText;
