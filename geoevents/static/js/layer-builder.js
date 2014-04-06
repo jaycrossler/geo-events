@@ -881,8 +881,8 @@ incident_support.addDataTable=function(data,layerData){
                 $icon.removeClass("icon-circle-arrow-down");
                 $icon.addClass("icon-circle-arrow-right");
             }
-            options.oTableTools.fnResizeRequired(true);
-            options.oTableTools.fnResizeButtons();
+//            options.oTableTools.fnResizeRequired(true);
+//            options.oTableTools.fnResizeButtons();
 
         })
         .appendTo($title);
