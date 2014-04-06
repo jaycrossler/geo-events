@@ -489,8 +489,8 @@ incident_support.configureMap=function(){
         var lonlat = map.getLonLatFromPixel(position);
         var text = "";
         if (position && lonlat && lonlat.lat && typeof maptools!="undefined" && maptools.inWorldBounds(lonlat.lat, lonlat.lon)){
-            var lat = latlng.lat;
-            var lng = latlng.lng || latlng.lon || 0;
+            var lat = lonlat.lat;
+            var lng = lonlat.lon || 0;
             lng = maptools.correctDegree(lng);
 
             text = "Lat: " + lat.toFixed(6) + " , Lon: "+lng.toFixed(6);
