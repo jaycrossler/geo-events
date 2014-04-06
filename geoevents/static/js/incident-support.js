@@ -409,7 +409,7 @@ incident_support.setupPageAddins=function(){
             title:'Email a link to this page',
             content:'Open an email in your default mail program that has a link to this page.',
             trigger:'hover',
-            placement:'right'
+            placement:'left'
         });
 
     $('#map_coords')
@@ -491,10 +491,13 @@ incident_support.configureMap=function(){
         if (position && lonlat && lonlat.lat && typeof maptools!="undefined" && maptools.inWorldBounds(lonlat.lat, lonlat.lon)){
             text = "Lat: " + lonlat.lat.toFixed(6) + " , Lon: "+lonlat.lon.toFixed(6);
             var ngText = '';
+            var usngCoords = maptools.latLongToUsng(lat, lng, 5);
+            var usngText = usngCoords.usngString;
+
             if (maptools.inUSBounds(lonlat)) {
-                ngText += " , USNG: "+maptools.latLongToUsng(lonlat.lat, lonlat.lon,3);
+                ngText += "USNG: "+usngText;
             } else {
-                ngText += " , MGRS: "+maptools.latLongToMgrs(lonlat.lat, lonlat.lon,3);
+                ngText += "MGRS: "+usngText;
             }
             if (ngText && ngText.indexOf && ngText.indexOf('NaN')>0) ngText='';
             text += ngText;

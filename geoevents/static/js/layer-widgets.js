@@ -208,7 +208,7 @@ layer_widgets.updateResultWidgets=function(map){
 
                                         }
                                     })
-                                    .css({cursor:'pointer'})
+                                    .css({cursor:'pointer',color:'blue'})
                                     .appendTo($div);
 
                             }
