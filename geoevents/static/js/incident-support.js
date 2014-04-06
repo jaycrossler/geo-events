@@ -1854,5 +1854,5 @@ incident_support.addDropoffFiles=function(){
 };
 incident_support.setupOverviewMin=function(){
     $("#overview")
-        .css({maxHeight:'250px',overflow:'scroll'});
+        .css({maxHeight:'250px',overflow:'auto'});
 }

@@ -739,6 +739,7 @@ layerHandler.layerMaker.getcapabilities=function(layerData){
 layerHandler.addFeatureTable=function(data,layerData){
     var $pluginHolder = $("#plugin_container");
     if (!$pluginHolder || !$pluginHolder.length || !layerData.show_in_table || layerData.show_in_table=="False") return;
+    $pluginHolder.show();
 
     var listOfItems=[];
     try {
@@ -841,6 +842,7 @@ layerHandler.addFeatureTable=function(data,layerData){
 incident_support.tablesDrawn={};
 incident_support.addDataTable=function(data,layerData){
     var $pluginHolder = $("#plugin_container");
+    $pluginHolder.show();
 
     if (incident_support.tablesDrawn[layerData.name]){
         //Already drawn, delete it
@@ -944,10 +946,11 @@ incident_support.parseFieldValHierarchical=function(field,item,dontEnterArrays){
     var pointer = item;
     var piecesOfField = field.split(".");
     _.each(piecesOfField,function(item_piece){
+        if (!pointer) return;
+
         pointer = pointer[item_piece];
         //TODO: This only returns first if it's an array, maybe use mustache script for better parsing
         if (!dontEnterArrays && pointer && _.isArray(pointer)){pointer= _.first(pointer);}
-        if (!pointer) return false;
     });
     return pointer;
 };

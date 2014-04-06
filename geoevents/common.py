@@ -46,8 +46,7 @@ def menu(active=None, request_path=None):
         'Notes': {'index': 2, 'url': reverse_lazy('notes-view-notes'), 'active': False},
         'Links': {'index': 3, 'url': '#', 'active': False, 'dropdown': order_dict(links_dropdown, sort_key)},
         'Resources': {'index': 4, 'url': reverse_lazy('operations-view-services'), 'active': False},
-        #    'SitReps':{'index':5, 'url':reverse_lazy('operations-view-sitreps'), 'active':False},
-        'Help': {'index': 6, 'url': reverse_lazy('add-feedback'), 'active': False,
+        'Help': {'index': 5, 'url': reverse_lazy('add-feedback'), 'active': False,
                  'dropdown': order_dict(help_dropdown, sort_key)},
     }
 

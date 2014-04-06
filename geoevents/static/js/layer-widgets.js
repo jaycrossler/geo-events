@@ -54,8 +54,8 @@ layer_widgets.createResultWidgets=function(){
             $('<div>')
                 .attr('id',widgetID)
                 .css({
-                    maxHeight:'150px',overflow:'scroll',display:'none',
-                    verticalAlign:'top',maxWidth:widgetWidth+'px'
+                    maxHeight:'150px',overflow:'scroll',display:'none',fontSize:'9px',
+                    verticalAlign:'top',maxWidth:widgetWidth+'px',whiteSpace:'nowrap'
                 })
                 .addClass('thumbnail')
                 .appendTo($holder);
@@ -190,8 +190,8 @@ layer_widgets.updateResultWidgets=function(map){
                             var $div = $('<div>')
                                 .appendTo($widgetHolder); //TODO: Make it look nicer
                             if (point){
-                                $("<i>")
-                                    .addClass('icon icon-map')
+                                $("<span>")
+                                    .text("@ ")
                                     .on('click',function(){
 
                                         //TODO: Check if it's a point or polygon
@@ -209,7 +209,7 @@ layer_widgets.updateResultWidgets=function(map){
                                         }
                                     })
                                     .css({cursor:'pointer'})
-                                    .appendTo($div)
+                                    .appendTo($div);
 
                             }
 
@@ -229,7 +229,7 @@ layer_widgets.updateResultWidgets=function(map){
                                         title:name,
                                         content:status,
                                         trigger:'hover',
-                                        placement:'top'
+                                        placement:'right'
                                     });
 
                             }
