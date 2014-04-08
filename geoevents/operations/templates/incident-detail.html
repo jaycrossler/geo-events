@@ -352,7 +352,7 @@ $(document).ready(function() {
             <h3 class="landing-page-header"><i class="icon icon-flag"></i>Supporting Organizations</h3>
             {% if item.agencies.all %}
                 {% for agency in item.agencies.all %}
-                    <a href="{{ agency.url }}" target="_new"><img src="{{ agency.logo_url }}" height="60" title="{{ agency.name }}"/></a>
+                    <a href="{{ agency.url }}" target="_new"><img src="{{ agency.logo_url }}" title="{{ agency.name }}"/></a>
                 {% endfor %}
             {% else %}
                 <p>No supporting agencies have been added.</p>
