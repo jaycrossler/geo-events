@@ -292,11 +292,11 @@ layerHandler.layerMaker.kml=function(layerData){
     var loadItFunction = function(){
         function getAndParseRemoteData(data){
             if (!data) {
-                console.log("-Trying to parse "+stype+" data from "+layerData.name+", but no data passed in.");
+                console.log("-Trying to parse "+stype+" data from "+layerData.name+" ("+layerData.url+"), but no data passed in.");
                 return;
             }
             if (data.status && data.status=="error"){
-                console.log("-Trying to parse "+layerData.name+", but received an error: "+data.details);
+                console.log("-Trying to parse "+layerData.name+" ("+layerData.url+"), but received an error: "+data.details);
                 return;
             }
 
@@ -745,7 +745,8 @@ layerHandler.addFeatureTable=function(data,layerData){
     try {
         var isXML=false;
         var dataJSON = data;
-        if (data && data.firstChild && data.baseURI) {
+        //If it looks like KML, try to turn it into a JSON object
+        if (data && (data.firstChild && data.baseURI) || (_.isString(data) && _.string.startsWith(data,"<?xml version"))) {
             dataJSON = $.xml2json(data);
             isXML = true;
         }
@@ -774,6 +775,9 @@ layerHandler.addFeatureTable=function(data,layerData){
 
         var rootNode = incident_support.parseFieldValHierarchical(layerRoot,dataJSON,true);
         if (rootNode){
+            //TODO: If NetworkLink.Link.href then load that instead from the kml
+            //TODO: If KMZ, route through a KMZ-KML translator
+
             _.each(rootNode,function(item){
                 var newItem = {};
                 if (fieldsToParse.length){
@@ -826,11 +830,11 @@ layerHandler.addFeatureTable=function(data,layerData){
             });
 
         } else {
-            console.log("Error when parsing layerData for layer "+layerData.name+" - no existing root note specified");
+            console.log("-Error when parsing layerData for layer "+layerData.name+" ("+layerData.url+") no existing root note specified");
         }
 
     } catch(ex){
-        console.log("Trying to turn layer "+layerData.name+" into a table - Exception parsing in addFeatureTable.");
+        console.log("-Trying to turn layer "+layerData.name+" ("+layerData.url+") into a table - Exception parsing in addFeatureTable.");
         console.log(ex);
     }
     if (listOfItems && listOfItems.length){
