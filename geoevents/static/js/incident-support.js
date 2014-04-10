@@ -1630,7 +1630,7 @@ incident_support.drawTimeline=function(options){
         data.push({
             'start': endDate.toDate(),
             'className': 'timeline-item-eventinfo',
-            'content': 'Event Closed<br><img src='+event.incidentIcon+' width=18 height=18/>'
+            'content': 'Event Closed<br><img src="'+event.incidentIcon+'" width=18 height=18/>'
         });
     }
 

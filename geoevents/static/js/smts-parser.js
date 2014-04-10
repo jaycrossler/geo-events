@@ -142,15 +142,17 @@ incident_support.smts_error=function(xhr){
         return;
     }
 
-    //TODO: Expand error reporting
-    console.log("SMTS ERROR:");
-    console.log(xhr);
+    console.log("SMTS ERROR: Likely no valid URL entered, or invalid XML returned from server");
 };
 incident_support.smts_add_categories=function(){
     var url=settings.serverurl_smtsjson_categories;
     if (!url) return false;
 
     var smts_url = event_pages.proxify(url);
+    if (url.indexOf("http://www.yourserver.com") > -1) {
+        console.log("-Products Feed location still set to be default server. Skipping");
+        return false;
+    }
     $.ajax({
         type: "GET",
         url: smts_url,
@@ -158,7 +160,7 @@ incident_support.smts_add_categories=function(){
     })
     .done(incident_support.smts_categories_received)
     .fail(function(){
-            console.log("SMTS Categories Lookup failed");
+            console.log("-SMTS Categories Lookup failed");
     });
 };
 incident_support.smts_categories_pointer=null;

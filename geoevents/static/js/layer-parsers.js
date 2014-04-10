@@ -266,7 +266,7 @@ incident_support.parsers.parseDGWMTS=function(layerInfo,options) {
 };
 
 incident_support.parsers.fieldFinder=function(features,data,layer){
-    if (data && data.firstChild){
+    if (data && (data.firstChild) || (_.isString(data) && _.string.startsWith(data,"<?xml version"))) {
         var data = $.xml2json(data);
 
         //Can be either data.Document.Document[array].Placemark

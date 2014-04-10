@@ -774,8 +774,13 @@ layerHandler.addFeatureTable=function(data,layerData){
         }
 
         var rootNode = incident_support.parseFieldValHierarchical(layerRoot,dataJSON,true);
+        if (!rootNode){
+            if (dataJSON && dataJSON.NetworkLink && dataJSON.NetworkLink.Link && dataJSON.NetworkLink.Link.href){
+                //Looks like it's a KML file with a NetworkLink in it.
+                rootNode = [{name:dataJSON.NetworkLink.Link.href, id:'Redirect'}];
+            }
+        }
         if (rootNode){
-            //TODO: If NetworkLink.Link.href then load that instead from the kml
             //TODO: If KMZ, route through a KMZ-KML translator
 
             _.each(rootNode,function(item){

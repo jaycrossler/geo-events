@@ -268,7 +268,13 @@ event_pages.proxify = function(newUrl,dontEncode){
             var proxyInfo = event_pages.which_proxy(newUrl);
             var useProxy = proxyInfo.proxy;
             if (addProxy && useProxy) {
-                if (proxyInfo.encode || !dontEncode) newUrl = encodeURIComponent(newUrl);
+                if (proxyInfo.encode) {
+                    if (dontEncode==true) {
+                        //Override whether to encode, even if proxy is set to do so
+                    } else {
+                        newUrl = encodeURIComponent(newUrl);
+                    }
+                }
                 newUrl = useProxy + newUrl;
             }
         }
